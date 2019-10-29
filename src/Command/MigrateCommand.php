@@ -32,6 +32,12 @@ class MigrateCommand extends Command
                 getcwd()
             )
             ->addOption(
+                'exclude',
+                'e',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Directories in which to exclude rewrites. Always excludes .git and the configured vendor directories.'
+            )
+            ->addOption(
                 'no-plugin',
                 null,
                 InputOption::VALUE_NONE,
@@ -66,7 +72,7 @@ class MigrateCommand extends Command
             Helper::writeJson($path . '/composer.json', $json);
         }
 
-        foreach ($this->findProjectFiles($path) as $file) {
+        foreach ($this->findProjectFiles($path, $input->getOption('exclude')) as $file) {
             $content = file_get_contents($file);
             $content = Helper::replace($content);
             file_put_contents($file, $content);
@@ -82,11 +88,12 @@ class MigrateCommand extends Command
 
     /**
      * @param string $path
+     * @param string[] $excludePaths
      * @return RecursiveIteratorIterator
      */
-    private function findProjectFiles($path)
+    private function findProjectFiles($path, array $excludePaths)
     {
-        $exclude = $this->createExclusionChecker($path);
+        $exclude = $this->createExclusionChecker($path, $excludePaths);
 
         $dir = new RecursiveDirectoryIterator(
             $path,
@@ -113,26 +120,38 @@ class MigrateCommand extends Command
 
     /**
      * @param string $path
+     * @param string[] $excludePaths
      * @return callable
      */
-    private function createExclusionChecker($path)
+    private function createExclusionChecker($path, array $excludePaths)
     {
-        $exclusions = [];
+        /**
+         * @param string $path
+         * @return string
+         */
+        $normalization = static function ($path) {
+            return sprintf('/%s/', trim($path, '/\\'));
+        };
+
+        // Normalize paths to ensure they are searched as directory segments
+        $excludePaths = array_map($normalization, $excludePaths);
+
         $composer = json_decode(file_get_contents($path . '/composer.json'), true);
         $vendorDir = isset($composer['config']['vendor-dir'])
             ? $path . '/' . $composer['config']['vendor-dir'] . '/'
             : $path . '/vendor/';
 
-        $exclusions[] = realpath($vendorDir);
-        $exclusions[] = '/.git/';
+        // Prepend most common exclusions
+        array_unshift($excludePaths, realpath($vendorDir));
+        array_unshift($excludePaths, '/.git/');
 
         /**
          * @param string $path
          * @return bool
          */
-        return static function ($path) use ($exclusions) {
-            foreach ($exclusions as $exclude) {
-                if (strpos($path, $exclude) !== false) {
+        return static function ($path) use ($excludePaths) {
+            foreach ($excludePaths as $excludePath) {
+                if (strpos($path, $excludePath) !== false) {
                     return true;
                 }
             }
