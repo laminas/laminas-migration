@@ -100,7 +100,7 @@ class MigrateCommand extends Command
 
         $files = new RecursiveCallbackFilterIterator(
             $dir,
-            function (SplFileInfo $current, $key, $iterator) use ($vendorDir) {
+            static function (SplFileInfo $current, $key, $iterator) use ($vendorDir) {
                 if ($iterator->hasChildren()) {
                     return true;
                 }
