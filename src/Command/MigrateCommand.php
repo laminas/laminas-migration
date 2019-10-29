@@ -86,12 +86,7 @@ class MigrateCommand extends Command
      */
     private function findProjectFiles($path)
     {
-        $composer = json_decode(file_get_contents($path . '/composer.json'), true);
-
-        $vendorDir = isset($composer['config']['vendor-dir'])
-            ? $path . '/' . $composer['config']['vendor-dir'] . '/'
-            : $path . '/vendor/';
-        $vendorDir = realpath($vendorDir);
+        $exclude = $this->createExclusionChecker($path);
 
         $dir = new RecursiveDirectoryIterator(
             $path,
@@ -100,12 +95,12 @@ class MigrateCommand extends Command
 
         $files = new RecursiveCallbackFilterIterator(
             $dir,
-            static function (SplFileInfo $current, $key, $iterator) use ($vendorDir) {
+            static function (SplFileInfo $current, $key, $iterator) use ($exclude) {
                 if ($iterator->hasChildren()) {
                     return true;
                 }
 
-                if ($current->isFile() && strpos($current->getPathname(), $vendorDir) === false) {
+                if ($current->isFile() && ! $exclude($current->getPathname())) {
                     return true;
                 }
 
@@ -114,5 +109,34 @@ class MigrateCommand extends Command
         );
 
         return new RecursiveIteratorIterator($files);
+    }
+
+    /**
+     * @param string $path
+     * @return callable
+     */
+    private function createExclusionChecker($path)
+    {
+        $exclusions = [];
+        $composer = json_decode(file_get_contents($path . '/composer.json'), true);
+        $vendorDir = isset($composer['config']['vendor-dir'])
+            ? $path . '/' . $composer['config']['vendor-dir'] . '/'
+            : $path . '/vendor/';
+
+        $exclusions[] = realpath($vendorDir);
+        $exclusions[] = '/.git/';
+
+        /**
+         * @param string $path
+         * @return bool
+         */
+        return function ($path) use ($exclusions) {
+            foreach ($exclusions as $exclude) {
+                if (strpos($path, $exclude) !== false) {
+                    return true;
+                }
+            }
+            return false;
+        };
     }
 }
