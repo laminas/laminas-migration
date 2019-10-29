@@ -125,10 +125,16 @@ class MigrateCommand extends Command
      */
     private function createExclusionChecker($path, $excludePaths)
     {
-        // Normalize paths to ensure they are searched as directory segments
-        $excludePaths = array_map(function ($path) {
+        /**
+         * @param string $path
+         * @return string
+         */
+        $normalization = static function ($path) {
             return sprintf('/%s/', trim($path, '/\\'));
-        }, $excludePaths);
+        };
+
+        // Normalize paths to ensure they are searched as directory segments
+        $excludePaths = array_map($normalization, $excludePaths);
 
         $composer = json_decode(file_get_contents($path . '/composer.json'), true);
         $vendorDir = isset($composer['config']['vendor-dir'])
