@@ -7,7 +7,7 @@ Migrate a Zend Framework project or third-party library to target Laminas/Expres
 Install the library globally using composer:
 
 ```console
-$ composer install --global laminas/laminas-migration
+$ composer require --global laminas/laminas-migration
 ```
 
 Run the command:
