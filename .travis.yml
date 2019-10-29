@@ -46,7 +46,7 @@ install:
   - stty cols 120 && composer show
 
 script:
-  - composer cs-check -- -p src --standard=PHPCompatibility --runtime-set testVersion $COMPAT_VERSION ; fi
+  - composer cs-check -- -p src --standard=PHPCompatibility --runtime-set testVersion $COMPAT_VERSION
 
 notifications:
   email: false
