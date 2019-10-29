@@ -91,7 +91,7 @@ class MigrateCommand extends Command
      * @param string[] $excludePaths
      * @return RecursiveIteratorIterator
      */
-    private function findProjectFiles($path, $excludePaths)
+    private function findProjectFiles($path, array $excludePaths)
     {
         $exclude = $this->createExclusionChecker($path, $excludePaths);
 
@@ -123,7 +123,7 @@ class MigrateCommand extends Command
      * @param string[] $excludePaths
      * @return callable
      */
-    private function createExclusionChecker($path, $excludePaths)
+    private function createExclusionChecker($path, array $excludePaths)
     {
         /**
          * @param string $path
