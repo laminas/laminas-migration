@@ -120,6 +120,7 @@ class MigrateCommand extends Command
 
     /**
      * @param string $path
+     * @param string[] $excludePaths
      * @return callable
      */
     private function createExclusionChecker($path, $excludePaths)
