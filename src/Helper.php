@@ -71,7 +71,8 @@ class Helper
      */
     public static function writeJson($file, array $data)
     {
-        $content = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
+        $flag = PHP_VERSION >= 5.4 ? JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES : 0;
+        $content = json_encode($data, $flag) . PHP_EOL;
 
         return file_put_contents($file, $content);
     }
