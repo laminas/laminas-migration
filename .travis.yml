@@ -1,0 +1,52 @@
+language: php
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+env:
+  global:
+    - COMPOSER_ARGS="--no-interaction"
+
+matrix:
+  include:
+    - php: 5.3
+      dist: precise
+      env:
+        - COMPAT_VERSION=5.6
+    - php: 5.4
+      env:
+        - COMPAT_VERSION=5.6
+    - php: 5.5
+      env:
+        - COMPAT_VERSION=5.6
+    - php: 5.6
+      env:
+        - COMPAT_VERSION=5.6
+    - php: 7.0
+      env:
+        - COMPAT_VERSION=7.0
+    - php: 7.1
+      env:
+        - COMPAT_VERSION=7.1
+    - php: 7.2
+      env:
+        - COMPAT_VERSION=7.2
+    - php: 7.3
+      env:
+        - COMPAT_VERSION=7.3
+    - php: 7.4snapshot
+      env:
+        - COMPAT_VERSION=7.4
+  allow_failures:
+    - php: 7.4snapshot
+
+install:
+  - composer update $COMPOSER_ARGS
+  - stty cols 120 && composer show
+
+script:
+  - composer cs-check -- -p src --standard=PHPCompatibility --runtime-set testVersion $COMPAT_VERSION ; fi
+
+notifications:
+  email: false

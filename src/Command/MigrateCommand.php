@@ -8,7 +8,7 @@
 
 namespace Laminas\Migration\Command;
 
-use Laminas\ZendFrameworkBridge\RewriteRules;
+use Laminas\Migration\Helper;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -16,6 +16,7 @@ use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MigrateCommand extends Command
@@ -29,9 +30,18 @@ class MigrateCommand extends Command
                 InputArgument::OPTIONAL,
                 'The path to the project/library to migrate',
                 getcwd()
+            )
+            ->addOption(
+                'no-plugin',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not install laminas/laminas-dependency-plugin'
             );
     }
 
+    /**
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
@@ -49,56 +59,31 @@ class MigrateCommand extends Command
             unlink($path . '/composer.lock');
         }
 
-        $replacements = RewriteRules::namespaceRewrite();
-        // Do not rewrite:
-        $replacements['ZF\Console'] = 'ZF\Console';
-        $replacements['zfcampus/zf-console'] = 'zfcampus/zf-console';
-        $replacements['Zend\Version'] = 'Zend\Version';
-        $replacements['zendframework/zend-version'] = 'zendframework/zend-version';
-        $replacements['ZendPdf'] = 'ZendPdf';
-        $replacements['zendframework/zendpdf'] = 'zendframework/zendpdf';
-        $replacements['zf-commons'] = 'zf-commons';
-        $replacements['api-skeletons/zf-'] = 'api-skeletons/zf-';
-        $replacements['phpro/zf-'] = 'phpro/zf-';
-
-        // Packages rewrite rules:
-        $replacements['zenddiagnostics'] = 'laminas-diagnostics';
-        $replacements['zendoauth'] = 'laminas-oauth';
-        $replacements['zendservice-apple-apns'] = 'laminas-apple-apns';
-        $replacements['zendservice-google-gcm'] = 'laminas-google-gcm';
-        $replacements['zendservice-recaptcha'] = 'laminas-recaptcha';
-        $replacements['zendservice-twitter'] = 'laminas-twitter';
-        $replacements['zendxml'] = 'laminas-xml';
-        $replacements['zendservice-twitter'] = 'laminas-twitter';
-        $replacements['zendframework/zend-problem-details'] = 'expressive/expressive-problem-details';
-        $replacements['zfcampus/zf-composer-autoloading'] = 'laminas/laminas-composer-autoloading';
-        $replacements['zfcampus/zf-deploy'] = 'laminas/laminas-deploy';
-        $replacements['zfcampus/zf-development-mode'] = 'laminas/laminas-development-mode';
-
-        // Additional rules - Config/Names
-        $replacements['Zend'] = 'Laminas';
-        $replacements['zendframework'] = 'laminas';
-        $replacements['zend-expressive'] = 'expressive';
-        $replacements['zend_expressive'] = 'expressive';
-        $replacements['zend'] = 'laminas';
-        $replacements['zf-apigility'] = 'apigility';
-        $replacements['zf_apigility'] = 'apigility';
-        $replacements['zf-'] = 'apigility-';
-        $replacements['zf_'] = 'apigility_';
-        $replacements['zfcampus'] = 'apigility';
+        $noPlugin = $input->getOption('no-plugin');
+        if (! $noPlugin) {
+            $json = json_decode(file_get_contents($path . '/composer.json'), true);
+            $json['require']['laminas/laminas-dependency-plugin'] = '^0.1.2';
+            Helper::writeJson($path . '/composer.json', $json);
+        }
 
         foreach ($this->findProjectFiles($path) as $file) {
             $content = file_get_contents($file);
-            $content = strtr($content, $replacements);
+            $content = Helper::replace($content);
             file_put_contents($file, $content);
 
-            $newName = strtr($file, $replacements);
+            $newName = Helper::replace($file);
             if ($newName !== $file) {
                 rename($file, $newName);
             }
         }
+
+        return 0;
     }
 
+    /**
+     * @param string $path
+     * @return RecursiveIteratorIterator
+     */
     private function findProjectFiles($path)
     {
         $composer = json_decode(file_get_contents($path . '/composer.json'), true);

@@ -7,15 +7,21 @@
     },
     "require": {
         "php": "^5.3 || ^7.0",
+        "ext-json": "*",
         "laminas/laminas-zendframework-bridge": "^0.3.1",
         "symfony/console": "^2.8 || ^3.4 || ^4.3"
     },
     "require-dev": {
+        "phpcompatibility/php-compatibility": "^9.3",
         "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-4": {
             "Laminas\\Migration\\": "src/"
         }
+    },
+    "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf"
     }
 }
