@@ -130,7 +130,7 @@ class MigrateCommand extends Command
          * @param string $path
          * @return bool
          */
-        return function ($path) use ($exclusions) {
+        return static function ($path) use ($exclusions) {
             foreach ($exclusions as $exclude) {
                 if (strpos($path, $exclude) !== false) {
                     return true;
