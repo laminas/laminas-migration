@@ -68,7 +68,7 @@ EOH;
         $output->writeln('<info>Checking for Zend Framework packages in project</info>');
 
         $command = sprintf('%s show -f json', $composer);
-        $results = array();
+        $results = [];
         $status = 0;
 
         exec($command, $results, $status);
@@ -81,7 +81,7 @@ EOH;
         }
 
         $data = json_decode(trim(implode("\n", $results)));
-        $packages = array();
+        $packages = [];
 
         foreach ($data->installed as $package) {
             if (! preg_match('#^(zfcampus|zendframework)/#', $package->name)) {
@@ -139,11 +139,11 @@ EOH;
      */
     private function preparePackageInfo(stdClass $package, $composer, OutputInterface $output)
     {
-        return array(
+        return [
             'name' => $package->name,
             'version' => $package->version,
             'dev' => $this->isDevPackage($package->name, $composer, $output),
-        );
+        ];
     }
 
     /**
@@ -154,7 +154,7 @@ EOH;
     private function isDevPackage($packageName, $composer, OutputInterface $output)
     {
         $command = sprintf('%s why -r %s', $composer, $packageName);
-        $results = array();
+        $results = [];
         $status = 0;
 
         exec($command, $results, $status);

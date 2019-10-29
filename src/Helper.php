@@ -17,7 +17,7 @@ class Helper
      */
     private static function replacements()
     {
-        return RewriteRules::namespaceRewrite() + array(
+        return RewriteRules::namespaceRewrite() + [
             // Do not rewrite:
             'ZF\Console' => 'ZF\Console',
             'zfcampus/zf-console' => 'zfcampus/zf-console',
@@ -53,7 +53,7 @@ class Helper
             'zf-' => 'apigility-',
             'zf_' => 'apigility_',
             'zfcampus' => 'apigility',
-        );
+        ];
     }
 
     /**
