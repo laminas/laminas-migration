@@ -14,8 +14,8 @@ use Symfony\Component\Console\Application;
 require __DIR__ . '/../vendor/autoload.php';
 
 $application = new Application('laminas-migration');
-$application->addCommands(array(
+$application->addCommands([
     new Command\MigrateCommand(),
     new Command\NestedDepsCommand(),
-));
+]);
 $application->run();

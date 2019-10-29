@@ -6,7 +6,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "^5.3 || ^7.0",
+        "php": "^5.6 || ^7.0",
         "ext-json": "*",
         "laminas/laminas-zendframework-bridge": "^0.3.1",
         "symfony/console": "^2.8 || ^3.4 || ^4.3"
