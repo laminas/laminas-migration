@@ -1,6 +1,6 @@
 <?php
 
-namespace Zend\ProblemDetails;
+namespace Expressive\ProblemDetails;
 
 use Laminas\ComposerAutoloading\Something;
 use Apigility\Doctrine\MyDoctrine;
