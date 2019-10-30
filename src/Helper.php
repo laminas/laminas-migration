@@ -40,10 +40,13 @@ class Helper
             'zendxml' => 'laminas-xml',
             'zendframework/zend-problem-details' => 'expressive/expressive-problem-details',
             'zendframework/zend-expressive' => 'expressive/expressive',
+            'zfcampus/apigility-documentation' => 'apigility/documentation',
             'zfcampus/zf-composer-autoloading' => 'laminas/laminas-composer-autoloading',
             'zfcampus/zf-deploy' => 'laminas/laminas-deploy',
             'zfcampus/zf-development-mode' => 'laminas/laminas-development-mode',
             'zf-composer-autoloading' => 'laminas-composer-autoloading',
+            'zf-deploy' => 'laminas-deploy',
+            'zf-development-mode' => 'laminas-development-mode',
 
             // Additional rules - Config/Names
             'Zend' => 'Laminas',
