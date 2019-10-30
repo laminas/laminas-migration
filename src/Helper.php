@@ -8,8 +8,6 @@
 
 namespace Laminas\Migration;
 
-use Laminas\ZendFrameworkBridge\RewriteRules;
-
 class Helper
 {
     /**
@@ -17,9 +15,22 @@ class Helper
      */
     private static function replacements()
     {
-        return RewriteRules::namespaceRewrite() + [
+        return [
+            // Package namespaces:
+            'Zend\\ProblemDetails' => 'Expressive\\ProblemDetails',
+            'Zend\\Expressive' => 'Expressive',
+            'ZF\\ComposerAutoloading' => 'Laminas\\ComposerAutoloading',
+            'ZF\\Deploy' => 'Laminas\\Deploy',
+            'ZF\\DevelopmentMode' => 'Laminas\\DevelopmentMode',
+            'ZF\\Apigility' => 'Apigility',
+            'ZendXml' => 'Laminas\\Xml',
+            'ZendOAuth' => 'Laminas\\OAuth',
+            'ZendDiagnostics' => 'Laminas\\Diagnostics',
+            'ZendService\\ReCaptcha' => 'Laminas\\ReCaptcha',
+            'ZendService\\Twitter' => 'Laminas\\Twitter',
+
             // Do not rewrite:
-            'ZF\Console' => 'ZF\Console',
+            'Doctrine\Zend' => 'Doctrine\Zend',
             'zfcampus/zf-console' => 'zfcampus/zf-console',
             'Zend\Version' => 'Zend\Version',
             'zendframework/zend-version' => 'zendframework/zend-version',
@@ -29,12 +40,12 @@ class Helper
             'api-skeletons/zf-' => 'api-skeletons/zf-',
             'phpro/zf-' => 'phpro/zf-',
             'doctrine-zend' => 'doctrine-zend',
+            'ZendService' => 'ZendService',
+            'ZF\Console' => 'ZF\Console',
 
             // Packages rewrite rules:
             'zenddiagnostics' => 'laminas-diagnostics',
             'zendoauth' => 'laminas-oauth',
-            'zendservice-apple-apns' => 'laminas-apple-apns',
-            'zendservice-google-gcm' => 'laminas-google-gcm',
             'zendservice-recaptcha' => 'laminas-recaptcha',
             'zendservice-twitter' => 'laminas-twitter',
             'zendxml' => 'laminas-xml',
@@ -44,12 +55,14 @@ class Helper
             'zfcampus/zf-composer-autoloading' => 'laminas/laminas-composer-autoloading',
             'zfcampus/zf-deploy' => 'laminas/laminas-deploy',
             'zfcampus/zf-development-mode' => 'laminas/laminas-development-mode',
+            'zend-problem-details' => 'expressive-problem-details',
             'zf-composer-autoloading' => 'laminas-composer-autoloading',
             'zf-deploy' => 'laminas-deploy',
             'zf-development-mode' => 'laminas-development-mode',
 
             // Additional rules - Config/Names
             'Zend' => 'Laminas',
+            'ZF\\' => 'Apigility\\',
             'zendframework' => 'laminas',
             'zend-expressive' => 'expressive',
             'zend_expressive' => 'expressive',
