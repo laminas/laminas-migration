@@ -77,8 +77,10 @@ class MigrateCommand extends Command
             $content = Helper::replace($content);
             file_put_contents($file, $content);
 
-            $newName = Helper::replace($file);
+            // Only rewrite the portion under the project root path.
+            $newName = sprintf('%s/%s', $path, Helper::replace(substr($file, strlen($path) + 1)));
             if ($newName !== $file) {
+                $this->createNewDirectory($newName);
                 rename($file, $newName);
             }
         }
@@ -157,5 +159,21 @@ class MigrateCommand extends Command
             }
             return false;
         };
+    }
+
+    /**
+     * If the path provided references a directory that does not yet exist,
+     * create it.
+     *
+     * @param string $path
+     * @return void
+     */
+    private function createNewDirectory($path)
+    {
+        $directory = dirname($path);
+        if (is_dir($directory)) {
+            return;
+        }
+        mkdir($directory, 0775, $recursive = true);
     }
 }
