@@ -1,32 +1,98 @@
 # laminas-migration
 
-Migrate a Zend Framework project or third-party library to target Laminas/Expressive/Apigility
+> ## TESTING PURPOSES ONLY
+>
+> This package is currently in testing phases. While it can be used to migrate
+> your application to Laminas packages, **those packages do not yet exist in a
+> stable form**. Only use this to help provide feedback on edge cases to the
+> Zend Framework and Laminas teams.
 
-## Usage
+Migrate a Zend Framework project or third-party library to target
+Laminas, Expressive, and/or Apigility.
 
-Install the library globally using composer:
+## Installation
 
-```console
+### Via Composer
+
+Install the library globally using [Composer](https://getcomposer.org):
+
+```bash
 $ composer require --global laminas/laminas-migration
 ```
 
-Run the command:
+### Via cloning
 
-```console
-$ laminas-migration migrate [path] [--no-plugin]
+Clone the repository somewhere:
+
+```bash
+$ git clone https://github.com/laminas/laminas-migration.git
 ```
 
-where `[path]` is path to your project you want to migrate.
-If skipped current path is going to be used.
+Install dependencies:
 
-If you use `--no-plugin` option plugin `laminas/laminas-dependency-plugin` is not going to be used,
-but it could cause issues with dependencies of third-party libraries.
+```bash
+$ cd laminas-migration
+$ composer install
+```
 
-If you decided not to use plugin to migrate nested dependencies you can use the following command:
+From there, either add the `bin/` directory to your `$PATH`, symlink the
+`bin/laminas-migration` script to a directory in your `$PATH`, or create an
+alias to the `bin/laminas-migration` script using your shell:
 
-```console
+```bash
+# Adding to PATH:
+$ export PATH=/path/to/laminas-migration/bin:$PATH
+# Symlinking to a directory in your PATH:
+$ cd $HOME/bin && ln -s /path/to/laminas-migration/bin/laminas-migration .
+# creating an alias:
+$ alias laminas-migration=/path/to/laminas-migration/bin/laminas-migration
+```
+
+## Usage
+
+### Migrating a library or project
+
+To migrate a library or project to Laminas, use the `migrate` command:
+
+```bash
+$ laminas-migration migrate [--no-plugin] [--exclude=|-e=] [path]
+```
+
+where:
+
+- `[path]` is the path to the project you want to migrate; if omitted, the
+  command assumes the current working directory.
+
+- `[--no-plugin]` can be specified to omit adding the Composer plugin
+  [laminas/laminas-dependency-plugin](https://github.com/laminas/laminas-dependency-plugin)
+  to your library or project. We do not recommend using this option; the plugin
+  ensures that any nested dependencies on Zend Framework packages will instead
+  install the Laminas variants. There are very few cases where this behavior is
+  not desired.
+
+- `[--exclude=|-e=]` can be used multiple times to specify _directories_ to omit
+  from the migration. Examples might include your `data/` or `cache/`
+  directories.
+
+When done, you can check to see what files were changed, and examine the
+`composer.json`. Run `composer install` to install dependencies, and then test
+your application.
+
+### Forcing nested dependencies to resolve to Laminas packages
+
+If you use the `--no-plugin` option to the `migrate` command, you can migrate
+nested dependencies manually using the `nested-deps` command:
+
+```bash
 $ laminas-migration nested-deps [path] [--composer=composer]
 ```
 
-where `[path]` is path to the project (if skipped current directory is going to be used)
-and `--composer` option is to provide custom path to `composer`.
+where:
+
+- `[path]` is the path to the project for which you want to perform the
+  operation; if omitted, the command assumes the current working directory.
+
+- `--composer` allows you to provide a custom path to the `composer` binary.
+
+This will be a one-off operation. If you add dependencies later, or perform a
+`composer update`, you may need to re-run it.
