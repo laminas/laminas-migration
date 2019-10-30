@@ -28,6 +28,7 @@ class Helper
             'zf-commons' => 'zf-commons',
             'api-skeletons/zf-' => 'api-skeletons/zf-',
             'phpro/zf-' => 'phpro/zf-',
+            'doctrine-zend' => 'doctrine-zend',
 
             // Packages rewrite rules:
             'zenddiagnostics' => 'laminas-diagnostics',
@@ -38,6 +39,7 @@ class Helper
             'zendservice-twitter' => 'laminas-twitter',
             'zendxml' => 'laminas-xml',
             'zendframework/zend-problem-details' => 'expressive/expressive-problem-details',
+            'zendframework/zend-expressive' => 'expressive/expressive',
             'zfcampus/zf-composer-autoloading' => 'laminas/laminas-composer-autoloading',
             'zfcampus/zf-deploy' => 'laminas/laminas-deploy',
             'zfcampus/zf-development-mode' => 'laminas/laminas-development-mode',
