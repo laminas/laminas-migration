@@ -43,6 +43,7 @@ class Helper
             'zfcampus/zf-composer-autoloading' => 'laminas/laminas-composer-autoloading',
             'zfcampus/zf-deploy' => 'laminas/laminas-deploy',
             'zfcampus/zf-development-mode' => 'laminas/laminas-development-mode',
+            'zf-composer-autoloading' => 'laminas-composer-autoloading',
 
             // Additional rules - Config/Names
             'Zend' => 'Laminas',
