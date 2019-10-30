@@ -16,13 +16,27 @@ class Helper
     private static function replacements()
     {
         return [
-            // Package namespaces:
+            // Package namespaces.
+            // Duplicates with varying numbers of escapes provided to ensure
+            // matching occurs properly across all edge cases.
+            'Zend\ProblemDetails' => 'Expressive\\ProblemDetails',
             'Zend\\ProblemDetails' => 'Expressive\\ProblemDetails',
+            'Zend\\\\ProblemDetails' => 'Expressive\\ProblemDetails',
+            'Zend\Expressive' => 'Expressive',
             'Zend\\Expressive' => 'Expressive',
+            'Zend\\\\Expressive' => 'Expressive',
+            'ZF\ComposerAutoloading' => 'Laminas\\ComposerAutoloading',
             'ZF\\ComposerAutoloading' => 'Laminas\\ComposerAutoloading',
+            'ZF\\\\ComposerAutoloading' => 'Laminas\\ComposerAutoloading',
+            'ZF\Deploy' => 'Laminas\\Deploy',
             'ZF\\Deploy' => 'Laminas\\Deploy',
+            'ZF\\\\Deploy' => 'Laminas\\Deploy',
+            'ZF\DevelopmentMode' => 'Laminas\\DevelopmentMode',
             'ZF\\DevelopmentMode' => 'Laminas\\DevelopmentMode',
+            'ZF\\\\DevelopmentMode' => 'Laminas\\DevelopmentMode',
+            'ZF\Apigility' => 'Apigility',
             'ZF\\Apigility' => 'Apigility',
+            'ZF\\\\Apigility' => 'Apigility',
             'ZendXml' => 'Laminas\\Xml',
             'ZendOAuth' => 'Laminas\\OAuth',
             'ZendDiagnostics' => 'Laminas\\Diagnostics',

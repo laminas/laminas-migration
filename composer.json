@@ -20,8 +20,14 @@
             "Laminas\\Migration\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "LaminasTest\\Migration\\": "test/"
+        }
+    },
     "scripts": {
         "cs-check": "phpcs",
-        "cs-fix": "phpcbf"
+        "cs-fix": "phpcbf",
+        "test": "phpunit"
     }
 }
