@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // NEVER REWRITE
+    'zendframework/zendframework' => 'zendframework/zendframework',
+
     // NAMESPACES
     // Zend Framework components
     'Zend\\AuraDi\\Config' => 'Laminas\\AuraDi\\Config',
@@ -301,13 +304,8 @@ return [
     // ZF components
     'zend-config' => 'laminas-config',
     'zend-developer-tools/' => 'laminas-developer-tools/',
-    'zend-skeleton-installer' => 'laminas-skeleton-installer',
     'zend-tag-cloud' => 'laminas-tag-cloud',
-    'zendframework/' => 'laminas/',
-    'zendframework/zendframework' => 'zendframework/zendframework',
     'zenddevelopertools' => 'laminasdevelopertools',
-    'ZendMonitor' => 'ZendMonitor',
-    'zendmonitor' => 'zendmonitor',
     'zendbarcodeobjectcodabar' => 'laminasbarcodeobjectcodabar',
     'zendbarcodeobjectcode128' => 'laminasbarcodeobjectcode128',
     'zendbarcodeobjectcode25interleaved' => 'laminasbarcodeobjectcode25interleaved',
@@ -573,8 +571,6 @@ return [
     'zendserializeradapterphpserialize' => 'laminasserializeradapterphpserialize',
     'zendserializeradapterpythonpickle' => 'laminasserializeradapterpythonpickle',
     'zendserializeradapterwddx' => 'laminasserializeradapterwddx',
-    'zendserverdisk' => 'zendserverdisk',
-    'zendservershm' => 'zendservershm',
     'zendtagclouddecoratorhtmlcloud' => 'laminastagclouddecoratorhtmlcloud',
     'zendtagclouddecoratorhtmltag' => 'laminastagclouddecoratorhtmltag',
     'zendtexttabledecoratorascii' => 'laminastexttabledecoratorascii',
@@ -733,14 +729,8 @@ return [
     'zf-mvc-auth' => 'apigility-mvc-auth',
     'zf-oauth2' => 'apigility-oauth2',
     'zf-versioning' => 'apigility-versioning',
-    'zf-apigility-doctrine-rpc-service' => 'apigility-doctrine-rpc-service',
-    'zf-apigility-doctrine-service' => 'apigility-doctrine-service',
-    'zf-apigility-doctrine-metadata-service' => 'apigility-doctrine-metadata-service',
-    'zf-apigility-doctrine-autodiscovery' => 'apigility-doctrine-autodiscovery',
     'ZfApigilityDoctrineQueryProviderManager' => 'ApigilityDoctrineQueryProviderManager',
     'ZfApigilityDoctrineQueryCreateFilterManager' => 'ApigilityDoctrineQueryCreateFilterManager',
-    'zf-apigility-doctrine-query-provider' => 'apigility-doctrine-query-provider',
-    'zf-apigility-doctrine-query-create-filter' => 'apigility-doctrine-query-create-filter',
     'zf-apigility-doctrine' => 'apigility-doctrine',
     'zfdeploy.phar' => 'laminas-deploy.phar',
     'zf-deploy' => 'laminas-deploy',
