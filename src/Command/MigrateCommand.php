@@ -52,40 +52,118 @@ class MigrateCommand extends Command
     {
         $path = $input->getArgument('path');
 
-        if (! file_exists($path . '/composer.json')) {
-            $output->writeln(sprintf(
-                '<error>Cannot find composer.json file in %s path</error>',
-                $path
-            ));
-
+        if (! $this->validatePath($path, $output)) {
             return 1;
         }
 
-        if (file_exists($path . '/composer.lock')) {
-            unlink($path . '/composer.lock');
-        }
+        $this->removeComposerLock($path);
+        $this->removeVendorDirectory($path);
 
-        $noPlugin = $input->getOption('no-plugin');
-        if (! $noPlugin) {
-            $json = json_decode(file_get_contents($path . '/composer.json'), true);
-            $json['require']['laminas/laminas-dependency-plugin'] = '^0.1.2';
-            Helper::writeJson($path . '/composer.json', $json);
+        if (! $input->getOption('no-plugin')) {
+            $this->injectDependencyPlugin($path);
         }
 
         foreach ($this->findProjectFiles($path, $input->getOption('exclude')) as $file) {
-            $content = file_get_contents($file);
-            $content = Helper::replace($content);
-            file_put_contents($file, $content);
-
-            // Only rewrite the portion under the project root path.
-            $newName = sprintf('%s/%s', $path, Helper::replace(substr($file, strlen($path) + 1)));
-            if ($newName !== $file) {
-                $this->createNewDirectory($newName);
-                rename($file, $newName);
-            }
+            $this->performReplacements($file, $path);
         }
 
         return 0;
+    }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    private function validatePath($path, OutputInterface $output)
+    {
+        if (file_exists($path . '/composer.json')) {
+            return true;
+        }
+
+        $output->writeln(sprintf(
+            '<error>Cannot find composer.json file in %s path</error>',
+            $path
+        ));
+        return false;
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     */
+    private function removeComposerLock($path)
+    {
+        if (! file_exists($path . '/composer.lock')) {
+            return;
+        }
+        unlink($path . '/composer.lock');
+    }
+
+    private function removeVendorDirectory($path)
+    {
+        $vendorDir = $this->locateVendorDirectory($path);
+        if (! is_dir($vendorDir)) {
+            return;
+        }
+        $this->removeDirectory($vendorDir);
+    }
+
+    private function removeDirectory($path)
+    {
+        foreach (scandir($path) as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+            $test = sprintf('%s/%s', $path, $file);
+            is_dir($test) && ! is_link($test)
+                ? $this->removeDirectory($test)
+                : unlink($test);
+        }
+        rmdir($path);
+    }
+
+    /**
+     * @param string $path Project path
+     * @return string Location of vendor directory
+     */
+    private function locateVendorDirectory($path)
+    {
+        $composer  = json_decode(file_get_contents($path . '/composer.json'), true);
+        return isset($composer['config']['vendor-dir'])
+            ? realpath($path) . '/' . $composer['config']['vendor-dir'] . '/'
+            : realpath($path) . '/vendor/';
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     */
+    private function injectDependencyPlugin($path)
+    {
+        $json = json_decode(file_get_contents($path . '/composer.json'), true);
+        $json['require']['laminas/laminas-dependency-plugin'] = '^0.1.2';
+        Helper::writeJson($path . '/composer.json', $json);
+    }
+
+    /**
+     * Perform replacements in $file, and rename $file if necessary
+     *
+     * @param string $file File being examined and updated
+     * @param string $path Project root path
+     * @return void
+     */
+    private function performReplacements($file, $path)
+    {
+        $content = file_get_contents($file);
+        $content = Helper::replace($content);
+        file_put_contents($file, $content);
+
+        // Only rewrite the portion under the project root path.
+        $newName = sprintf('%s/%s', $path, Helper::replace(substr($file, strlen($path) + 1)));
+        if ($newName !== $file) {
+            $this->createNewDirectory($newName);
+            rename($file, $newName);
+        }
     }
 
     /**
@@ -138,13 +216,8 @@ class MigrateCommand extends Command
         // Normalize paths to ensure they are searched as directory segments
         $excludePaths = array_map($normalization, $excludePaths);
 
-        $composer = json_decode(file_get_contents($path . '/composer.json'), true);
-        $vendorDir = isset($composer['config']['vendor-dir'])
-            ? $path . '/' . $composer['config']['vendor-dir'] . '/'
-            : $path . '/vendor/';
-
         // Prepend most common exclusions
-        array_unshift($excludePaths, realpath($vendorDir));
+        array_unshift($excludePaths, $this->locateVendorDirectory($path));
         array_unshift($excludePaths, '/.git/');
 
         /**
