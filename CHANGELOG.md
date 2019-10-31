@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.4 - TBD
+## 0.1.4 - 2019-10-31
 
 ### Added
 
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#4](https://github.com/laminas/laminas-migration/pull/4) updates the migration tool to remove the configured `vendor` directory if it is present, fixing some issues with initial installations following migration.
 
 ### Deprecated
 
