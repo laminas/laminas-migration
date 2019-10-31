@@ -281,7 +281,6 @@ return [
     'zfcampus/apigility-documentation' => 'apigility/documentation',
     'zfcampus/statuslib-example' => 'apigility/statuslib-example',
     'zfcampus/zf-apigility' => 'apigility/apigility',
-    'zfcampus/zf-apigility-doctrine' => 'apigility/apigility-doctrine',
     'zfcampus/zf-api-problem' => 'apigility/apigility-api-problem',
     'zfcampus/zf-asset-manager' => 'apigility/apigility-asset-manager',
     'zfcampus/zf-configuration' => 'apigility/apigility-configuration',
