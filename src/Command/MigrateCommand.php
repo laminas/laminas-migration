@@ -56,6 +56,8 @@ class MigrateCommand extends Command
             return 1;
         }
 
+        $path = realpath($path);
+
         $this->removeComposerLock($path);
         $this->removeVendorDirectory($path);
 
@@ -64,7 +66,7 @@ class MigrateCommand extends Command
         }
 
         foreach ($this->findProjectFiles($path, $input->getOption('exclude')) as $file) {
-            $this->performReplacements($file, $path);
+            $this->performReplacements($file->getRealPath(), $path);
         }
 
         return 0;
@@ -169,7 +171,7 @@ class MigrateCommand extends Command
     /**
      * @param string $path
      * @param string[] $excludePaths
-     * @return RecursiveIteratorIterator
+     * @return RecursiveIteratorIterator|SplFileInfo[]
      */
     private function findProjectFiles($path, array $excludePaths)
     {
