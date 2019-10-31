@@ -148,10 +148,8 @@ return [
     'Zend\\\\Uri' => 'Laminas\\\\Uri',
     'Zend\\\\Validator' => 'Laminas\\\\Validator',
     'Zend\\\\View' => 'Laminas\\\\View',
-    'ZendXml' => 'Laminas\\\\Xml',
     'Zend\\\\Xml2Json' => 'Laminas\\\\Xml2Json',
     'Zend\\\\XmlRpc' => 'Laminas\\\\XmlRpc',
-    'ZendOAuth' => 'Laminas\\\\OAuth',
 
     // Expressive
     'Zend\\Expressive' => 'Expressive',
