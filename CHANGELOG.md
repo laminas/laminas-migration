@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.2 - TBD
+## 0.1.2 - 2019-10-31
 
 ### Added
 
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#2](https://github.com/laminas/laminas-migration/pull/2) updates the package definition to expose the laminas-migration script as a vendor binary.
 
 ### Deprecated
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#2](https://github.com/laminas/laminas-migration/pull/2) fixes the autoloading rules for the laminas-migration script to ensure it can be used both globally and locally.
 
 ## 0.1.1 - 2019-10-30
 
