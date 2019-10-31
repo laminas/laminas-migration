@@ -11,10 +11,12 @@ namespace Laminas\Migration;
 
 use Symfony\Component\Console\Application;
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require __DIR__ . '/../vendor/autoload.php';
-} elseif (file_exists(__DIR__ . '/../../../autoload.php')) {
-    require __DIR__ . '/../../../autoload.php';
+if (file_exists($a = __DIR__ . '/../../../autoload.php')) {
+    require $a;
+} elseif (file_exists($a = __DIR__ . '/../vendor/autoload.php')) {
+    require $a;
+} elseif (file_exists($a = __DIR__ . '/../autoload.php')) {
+    require $a;
 } else {
     fwrite(STDERR, 'Cannot locate autoloader; please run "composer install"' . PHP_EOL);
     exit(1);
