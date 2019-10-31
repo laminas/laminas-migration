@@ -52,6 +52,9 @@ class Helper
             'doctrine-zend' => 'doctrine-zend',
             'ZendService' => 'ZendService',
             'ZF\Console' => 'ZF\Console',
+            'Zendesk' => 'Zendesk',
+            'Zend_' => 'Zend_', // ZF1 namespaces
+            'zendframework/zendframework' => 'zendframework/zendframework',
 
             // Packages rewrite rules:
             'zenddiagnostics' => 'laminas-diagnostics',
