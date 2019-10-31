@@ -11,7 +11,7 @@ namespace Laminas\Migration;
 
 use Symfony\Component\Console\Application;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../../autoload.php';
 
 $application = new Application('laminas-migration');
 $application->addCommands([
