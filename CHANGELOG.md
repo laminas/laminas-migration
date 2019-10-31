@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.3 - TBD
+## 0.1.3 - 2019-10-31
 
 ### Added
 
@@ -22,7 +22,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#3](https://github.com/laminas/laminas-migration/pull/3) adds rules to ensure ZenDesk class names and references are not rewritten.
+
+- [#3](https://github.com/laminas/laminas-migration/pull/3) adds rules to ensure ZF1 class names are not rewritten.
 
 ## 0.1.2 - 2019-10-31
 
