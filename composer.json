@@ -25,6 +25,9 @@
             "LaminasTest\\Migration\\": "test/"
         }
     },
+    "bin": [
+        "bin/laminas-migration"
+    ],
     "scripts": {
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
