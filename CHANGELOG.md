@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#5](https://github.com/laminas/laminas-migration/pull/5) changes how the rewrite rules work. Previously, we provided a small number of generic rules, and a growing list of exceptions. With this patch, we now provide a comprehensive list of package names, namespaces, and various configuration keys, binary names, etc. to replace, pulled from the source code for the project itself. This should prevent it rewriting code from third-party libraries.
 
 ### Deprecated
 
