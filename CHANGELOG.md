@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.6 - TBD
+## 0.1.6 - 2019-11-01
 
 ### Added
 
-- Nothing.
+- [#8](https://github.com/laminas/laminas-migration/pull/8) adds a replacement for "zend-expressive.", replacing it with "expressive."; this will ensure config files get renamed.
 
 ### Changed
 
