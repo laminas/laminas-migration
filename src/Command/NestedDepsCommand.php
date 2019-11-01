@@ -81,6 +81,10 @@ EOH;
         }
 
         $data = json_decode(trim(implode("\n", $results)));
+        if (! isset($data->installed)) {
+            return 1;
+        }
+
         $packages = [];
 
         foreach ($data->installed as $package) {
