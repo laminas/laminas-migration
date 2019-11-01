@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#6](https://github.com/laminas/laminas-migration/pull/6) fixes output in scenarios where no dependencies are installed.
 
 ## 0.1.5 - 2019-11-01
 
