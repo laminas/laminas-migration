@@ -344,6 +344,7 @@ return [
     // Expressive-related
     "'zend-expressive'" => "'expressive'",
     '"zend-expressive"' => '"expressive"',
+    'zend-expressive.' => 'expressive.',
     'zend-expressive-authorization' => 'expressive-authorization',
     'zend-expressive-hal' => 'expressive-hal',
     'zend-expressive-session' => 'expressive-session',
