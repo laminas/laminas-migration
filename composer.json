@@ -8,6 +8,7 @@
     "require": {
         "php": "^5.6 || ^7.0",
         "ext-json": "*",
+        "laminas/laminas-zendframework-bridge": "^0.3.3",
         "symfony/console": "^3.4 || ^4.3"
     },
     "require-dev": {

@@ -11,15 +11,6 @@ namespace Laminas\Migration;
 class Helper
 {
     /**
-     * @param string $string
-     * @return string
-     */
-    public static function replace($string)
-    {
-        return strtr($string, self::replacements());
-    }
-
-    /**
      * @param string $file
      * @return false|int
      */
@@ -28,19 +19,5 @@ class Helper
         $content = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
 
         return file_put_contents($file, $content);
-    }
-
-    /**
-     * @return string[]
-     */
-    private static function replacements()
-    {
-        static $replacements;
-
-        if (! is_array($replacements)) {
-            $replacements = include __DIR__ . '/../config/replacements.php';
-        }
-
-        return $replacements;
     }
 }
