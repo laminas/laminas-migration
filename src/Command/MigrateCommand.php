@@ -88,6 +88,9 @@ class MigrateCommand extends Command
             $this->performReplacements($file->getRealPath(), $path);
         }
 
+        $this->injectBridgeModule($path, $io);
+        $this->injectBridgeConfigPostProcessor($path, $io);
+
         $io->success('Migration complete!');
         $io->text([
             '<info>Next steps:</info>',
@@ -277,5 +280,77 @@ class MigrateCommand extends Command
             return;
         }
         mkdir($directory, 0775, $recursive = true);
+    }
+
+    /**
+     * param string $path
+     */
+    private function injectBridgeModule($path, SymfonyStyle $io)
+    {
+        $modulesConfig = sprintf('%s/config/modules.config.php', $path);
+        if (! file_exists($modulesConfig)) {
+            return;
+        }
+
+        $io->writeln(sprintf(
+            '<info>Injecting Laminas\ZendFrameworkBridge module into %s</info>',
+            $modulesConfig
+        ));
+
+        $contents = file_get_contents($modulesConfig);
+        if (! preg_match('/(?<prelude>return\s+(array\(|\[))(?<space>\s+)/s', $contents, $matches)) {
+            $io->error('- File is not in expected format; aborting injection');
+            $io->text(
+                'You will need to manually add an entry for "Laminas\ZendFrameworkBridge"',
+                . ' in your module configuration.'
+            );
+            return;
+        }
+
+        $search = $matches['prelude'] . $matches['space'];
+        $replacement = sprintf(
+            '%s%s\'Laminas\ZendFrameworkBridge\'%s',
+            $matches['prelude'],
+            $matches['space'],
+            $matches['space']
+        );
+        $newContents = str_replace($search, $replacement, $contents);
+
+        file_put_contents($modulesConfig, $newContents);
+    }
+
+    /**
+     * param string $path
+     */
+    private function injectBridgeConfigPostProcessor($path, SymfonyStyle $io)
+    {
+        $configFile = sprintf('%s/config/config.php', $path);
+        if (! file_exists($configFile)) {
+            return;
+        }
+
+        $io->writeln(sprintf(
+            '<info>Injecting Laminas\ZendFrameworkBridge\ConfigPostProcessor into %s</info>',
+            $configFile
+        ));
+
+        $contents = file_get_contents($configFile);
+        if (! preg_match('/(?<prelude>\$cacheConfig\[\'config_cache_path\'\])\);/s', $contents, $matches)) {
+            $io->error('- File is not in expected format; aborting injection');
+            $io->text(
+                'You will need to manually add the "Laminas\ZendFrameworkBridge\ConfigPostProcessor"',
+                . ' in your ConfigAggregator initialization.'
+            );
+            return;
+        }
+
+        $search = $matches['prelude'];
+        $replacement = sprintf(
+            '%s, [\Laminas\ZendFrameworkBridge\ConfigPostProcessor::class]',
+            $matches['prelude']
+        );
+        $newContents = str_replace($search, $replacement, $contents);
+
+        file_put_contents($configFile, $newContents);
     }
 }
