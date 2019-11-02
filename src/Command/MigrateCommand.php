@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateCommand extends Command
 {
@@ -60,24 +61,40 @@ class MigrateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
         $path = $input->getArgument('path');
 
-        if (! $this->validatePath($path, $output)) {
+        $io->title(sprintf('Migrating project at path "%s" to Laminas', $path));
+
+        if (! $this->validatePath($path, $io)) {
             return 1;
         }
 
         $path = realpath($path);
 
+        $io->writeln('<info>Removing composer.lock</info>');
         $this->removeComposerLock($path);
+
+        $io->writeln('<info>Removing configured vendor directory</info>');
         $this->removeVendorDirectory($path);
 
         if (! $input->getOption('no-plugin')) {
+            $io->writeln('<info>Injecting laminas-dependency-plugin into composer.json</info>');
             $this->injectDependencyPlugin($path);
         }
 
+        $io->writeln('<info>Performing migration replacements</info>');
         foreach ($this->findProjectFiles($path, $input->getOption('exclude')) as $file) {
             $this->performReplacements($file->getRealPath(), $path);
         }
+
+        $io->success('Migration complete!');
+        $io->text([
+            '<info>Next steps:</info>',
+            '- Perform a diff to verify the changes made.',
+            '- Run "composer install".',
+            '- Run any tests (unit tests, integration tests, end-to-end tests, etc.).'
+        ]);
 
         return 0;
     }
@@ -86,14 +103,14 @@ class MigrateCommand extends Command
      * @param string $path
      * @return bool
      */
-    private function validatePath($path, OutputInterface $output)
+    private function validatePath($path, SymfonyStyle $io)
     {
         if (file_exists($path . '/composer.json')) {
             return true;
         }
 
-        $output->writeln(sprintf(
-            '<error>Cannot find composer.json file in %s path</error>',
+        $io->error(sprintf(
+            'Cannot find composer.json file in %s path',
             $path
         ));
         return false;
