@@ -9,7 +9,6 @@
 namespace Laminas\Migration\Command;
 
 use Laminas\Migration\Helper;
-use Laminas\ZendFrameworkBridge\Replacements;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -23,15 +22,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateCommand extends Command
 {
-    /** @var Replacements */
-    private $replacements;
-
-    public function __construct($name = null)
-    {
-        $this->replacements = new Replacements();
-        parent::__construct($name);
-    }
-
     protected function configure()
     {
         $this->setName('migrate')
@@ -196,11 +186,11 @@ class MigrateCommand extends Command
     private function performReplacements($file, $path)
     {
         $content = file_get_contents($file);
-        $content = $this->replacements->replace($content);
+        $content = Helper::replace($content);
         file_put_contents($file, $content);
 
         // Only rewrite the portion under the project root path.
-        $newName = sprintf('%s/%s', $path, $this->replacements->replace(substr($file, strlen($path) + 1)));
+        $newName = sprintf('%s/%s', $path, Helper::replace(substr($file, strlen($path) + 1)));
         if ($newName !== $file) {
             $this->createNewDirectory($newName);
             rename($file, $newName);
@@ -310,7 +300,7 @@ class MigrateCommand extends Command
         if (! preg_match('/(?<prelude>return\s+(array\(|\[))(?<space>\s+)/s', $contents, $matches)) {
             $io->error('- File is not in expected format; aborting injection');
             $io->text(
-                'You will need to manually add an entry for "Laminas\ZendFrameworkBridge"',
+                'You will need to manually add an entry for "Laminas\ZendFrameworkBridge"'
                 . ' in your module configuration.'
             );
             return;
@@ -347,7 +337,7 @@ class MigrateCommand extends Command
         if (! preg_match('/(?<prelude>\$cacheConfig\[\'config_cache_path\'\])\);/s', $contents, $matches)) {
             $io->error('- File is not in expected format; aborting injection');
             $io->text(
-                'You will need to manually add the "Laminas\ZendFrameworkBridge\ConfigPostProcessor"',
+                'You will need to manually add the "Laminas\ZendFrameworkBridge\ConfigPostProcessor"'
                 . ' in your ConfigAggregator initialization.'
             );
             return;

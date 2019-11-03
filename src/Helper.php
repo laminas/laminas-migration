@@ -8,8 +8,22 @@
 
 namespace Laminas\Migration;
 
+use Laminas\ZendFrameworkBridge\Replacements;
+
 class Helper
 {
+    /**
+     * @param string $string
+     * @return string
+     */
+    public static function replace($string)
+    {
+        static $replacements;
+
+        $replacements = $replacements ?: new Replacements();
+        return $replacements->replace($string);
+    }
+
     /**
      * @param string $file
      * @return false|int
