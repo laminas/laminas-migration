@@ -72,22 +72,10 @@ class MigrateCommand extends Command
 
         $path = realpath($path);
 
-        $io->writeln('<info>Removing composer.lock</info>');
-        $this->removeComposerLock($path);
-
-        $io->writeln('<info>Removing configured vendor directory</info>');
-        $this->removeVendorDirectory($path);
-
-        if (! $input->getOption('no-plugin')) {
-            $io->writeln('<info>Injecting laminas-dependency-plugin into composer.json</info>');
-            $this->injectDependencyPlugin($path);
-        }
-
-        $io->writeln('<info>Performing migration replacements</info>');
-        foreach ($this->findProjectFiles($path, $input->getOption('exclude')) as $file) {
-            $this->performReplacements($file->getRealPath(), $path);
-        }
-
+        $this->removeComposerLock($path, $io);
+        $this->removeVendorDirectory($path, $io);
+        $this->injectDependencyPlugin($path, $input->getOption('no-plugin'), $io);
+        $this->migrateProjectFiles($path, $input->getOption('exclude'), $io);
         $this->injectBridgeModule($path, $io);
         $this->injectBridgeConfigPostProcessor($path, $io);
 
@@ -121,22 +109,26 @@ class MigrateCommand extends Command
 
     /**
      * @param string $path
-     * @return void
      */
-    private function removeComposerLock($path)
+    private function removeComposerLock($path, SymfonyStyle $io)
     {
         if (! file_exists($path . '/composer.lock')) {
             return;
         }
+        $io->writeln('<info>Removing composer.lock</info>');
         unlink($path . '/composer.lock');
     }
 
-    private function removeVendorDirectory($path)
+    /**
+     * @param string $path
+     */
+    private function removeVendorDirectory($path, SymfonyStyle $io)
     {
         $vendorDir = $this->locateVendorDirectory($path);
         if (! is_dir($vendorDir)) {
             return;
         }
+        $io->writeln('<info>Removing configured vendor directory</info>');
         $this->removeDirectory($vendorDir);
     }
 
@@ -168,13 +160,30 @@ class MigrateCommand extends Command
 
     /**
      * @param string $path
-     * @return void
+     * @param null|bool $noPluginOption
      */
-    private function injectDependencyPlugin($path)
+    private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io)
     {
+        if ($noPluginOption) {
+            return;
+        }
+
+        $io->writeln('<info>Injecting laminas-dependency-plugin into composer.json</info>');
         $json = json_decode(file_get_contents($path . '/composer.json'), true);
         $json['require']['laminas/laminas-dependency-plugin'] = '^0.1.2';
         Helper::writeJson($path . '/composer.json', $json);
+    }
+
+    /**
+     * @param string $path
+     * @param string[] $exclusions Directories to exclude
+     */
+    private function migrateProjectFiles($path, array $exclusions, SymfonyStyle $io)
+    {
+        $io->writeln('<info>Performing migration replacements</info>');
+        foreach ($this->findProjectFiles($path, $exclusions) as $file) {
+            $this->performReplacements($file->getRealPath(), $path);
+        }
     }
 
     /**
