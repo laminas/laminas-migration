@@ -308,7 +308,7 @@ class MigrateCommand extends Command
 
         $search = $matches['prelude'] . $matches['space'];
         $replacement = sprintf(
-            '%s%s\'Laminas\ZendFrameworkBridge\'%s',
+            '%s%s\'Laminas\ZendFrameworkBridge\',%s',
             $matches['prelude'],
             $matches['space'],
             $matches['space']
