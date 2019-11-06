@@ -2,15 +2,17 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.7 - TBD
+## 0.1.7 - 2019-11-06
 
 ### Added
 
-- Nothing.
+- [#9](https://github.com/laminas/laminas-migration/pull/9) adds output to the command, so users can know what is happening and/or what has completed.
 
 ### Changed
 
-- Nothing.
+- [#9](https://github.com/laminas/laminas-migration/pull/9) updates the tool to inject the lamians-zendframework-bridge configuration post processor in Expressive applications, and as a module in MVC applications.
+
+- [#9](https://github.com/laminas/laminas-migration/pull/9) updates the tool to require laminas-zendframework-bridge, for purposes of supplying replacements.
 
 ### Deprecated
 
