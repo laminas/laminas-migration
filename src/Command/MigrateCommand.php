@@ -319,7 +319,7 @@ class MigrateCommand extends Command
     }
 
     /**
-     * param string $path
+     * @param string $path
      */
     private function injectBridgeConfigPostProcessor($path, SymfonyStyle $io)
     {
