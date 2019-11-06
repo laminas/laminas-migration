@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.8 - TBD
+## 0.1.8 - 2019-11-06
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#10](https://github.com/laminas/laminas-migration/pull/10) adds a comma when injecting the `Laminas\ZendFrameworkBridge` module to MVC applications, thus preventing syntax errors post-migration.
 
 ## 0.1.7 - 2019-11-06
 
