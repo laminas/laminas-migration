@@ -22,10 +22,71 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateCommand extends Command
 {
+    const HELP = <<< EOH
+Migrate a project or library to target Laminas, Expressive, and/or Apigility
+packages.
+
+Basic Usage
+-----------
+
+In most cases, the command can be run without any arguments, in which case it
+will migrate the project in the current directory, rewriting any files that
+contain references to Zend Framework artifacts to instead reference the Laminas
+equivalents.
+
+If you wish to specify a path other than the current working directory, use the
+--path option.
+
+Excluding Files
+---------------
+
+If you wish to exclude all files under a given directory from migration, use
+the --exclude (or -e) option. A common use case for that is "--exclude data"
+or "--exclude data/cache". The --exclude option can be issued multiple times,
+one for each directory you wish to exclude.
+
+To exclude individual files, use the --exclude-file (-x) option. This option
+can also be issued multiple times.
+
+To provide a regular expression filter for matching files to rewrite, use the
+--filter (-f) option. Files that match the regular expression will be
+rewritten. This option can also be issued multiple times; if a file matches
+any filter, it will be rewritten.
+
+Injections
+----------
+
+The tooling provides three potential new injections into your code base:
+
+- Injecting the laminas/laminas-dependency-plugin Composer plugin as a
+  dependency. This plugin intercepts requests to install Zend Framework
+  packages, and substitutes the Laminas equivalents.
+
+- Injecting the `Laminas\ZendFrameworkBridge` module into MVC and Apigility
+  applications. This module provides configuration post processing to replace,
+  at runtime, references to known Zend Framework configuration keys and
+  dependencies with the Laminas equivalents.
+
+- Injecting the `Laminas\ZendFrameworkBridge\ConfigPostProcessor` class as a
+  `Laminas\ConfigAggregator\ConfigAggregator` post processor into Expressive
+  applications. This class provides configuration post processing to replace,
+  at runtime, references to known Zend Framework configuration keys and
+  dependencies with the Laminas equivalents.
+
+If you wish to prevent injection of the laminas/laminas-dependency-plugin in
+your application, use the --no-plugin option.
+
+If you wish to prevent injection of either the laminas-zendframework-bridge
+Module or ConfigPostProcessor into your application, use the
+--no-config-processor option.
+
+EOH;
+
     protected function configure()
     {
         $this->setName('migrate')
             ->setDescription('Migrate a project or third-party library to target Laminas/Expressive/Apigility')
+            ->setHelp(self::HELP)
             ->addArgument(
                 'path',
                 InputArgument::OPTIONAL,
@@ -37,6 +98,25 @@ class MigrateCommand extends Command
                 'e',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Directories in which to exclude rewrites. Always excludes .git and the configured vendor directories.'
+            )
+            ->addOption(
+                'exclude-file',
+                'x',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Individual files in which to exclude rewrites.'
+            )
+            ->addOption(
+                'filter',
+                'f',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Filters'
+            )
+            ->addOption(
+                'no-config-processor',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not install either the laminas/laminas-zendframework-bridge'
+                . ' Module or ConfigPostProcessor in your application'
             )
             ->addOption(
                 'no-plugin',
