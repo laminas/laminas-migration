@@ -32,7 +32,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- [#11](https://github.com/laminas/laminas-migration/pull/11) expands the constraint for the symfony/console dependency to include any 2.0, 3.0, 4.0, or 5.0 version.
+- [#11](https://github.com/laminas/laminas-migration/pull/11) expands the constraint for the symfony/console dependency to include any 2.1, 3.0, 4.0, or 5.0 version.
 
 - [#11](https://github.com/laminas/laminas-migration/pull/11) updates the laminas/laminas-zendframework-bridge dependency to `^0.3.7`.
 
