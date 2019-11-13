@@ -26,8 +26,8 @@ class MigrateCommand extends Command
 Migrate a project or library to target Laminas, Expressive, and/or Apigility
 packages.
 
-Basic Usage
------------
+<info>Basic Usage</info>
+<info>-----------</info>
 
 In most cases, the command can be run without any arguments, in which case it
 will migrate the project in the current directory, rewriting any files that
@@ -37,8 +37,8 @@ equivalents.
 If you wish to specify a path other than the current working directory, use the
 --path option.
 
-Excluding Files
----------------
+<info>Excluding Files</info>
+<info>---------------</info>
 
 If you wish to exclude all files under a given directory from migration, use
 the --exclude (or -e) option. A common use case for that is "--exclude data"
@@ -62,8 +62,8 @@ The above would only rewrite files with the suffixes ".php", ".php.dist",
 ".phtml", and ".json", as well as Dockerfiles and scripts matching the name
 "php-entrypoint".
 
-Injections
-----------
+<info>Injections</info>
+<info>----------</info>
 
 The tooling provides three potential new injections into your code base:
 
