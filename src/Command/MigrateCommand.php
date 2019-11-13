@@ -146,8 +146,10 @@ EOH;
         $this->removeVendorDirectory($path, $io);
         $this->injectDependencyPlugin($path, $input->getOption('no-plugin'), $io);
         $this->migrateProjectFiles($path, $input->getOption('exclude'), $io);
-        $this->injectBridgeModule($path, $io);
-        $this->injectBridgeConfigPostProcessor($path, $io);
+
+        $disableConfigProcessorInjection = $input->getOption('no-config-processor');
+        $this->injectBridgeModule($path, $disableConfigProcessorInjection, $io);
+        $this->injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, $io);
 
         $io->success('Migration complete!');
         $io->text([
@@ -362,12 +364,18 @@ EOH;
     }
 
     /**
-     * param string $path
+     * @param string $path
+     * @param bool $disableConfigProcessorInjection
      */
-    private function injectBridgeModule($path, SymfonyStyle $io)
+    private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io)
     {
         $modulesConfig = sprintf('%s/config/modules.config.php', $path);
         if (! file_exists($modulesConfig)) {
+            return;
+        }
+
+        if ($disableConfigProcessorInjection) {
+            $io->writeln('<info>Skipping injection of bridge module by request (--no-config-processor)</info>');
             return;
         }
 
@@ -400,11 +408,20 @@ EOH;
 
     /**
      * @param string $path
+     * @param bool $disableConfigProcessorInjection
      */
-    private function injectBridgeConfigPostProcessor($path, SymfonyStyle $io)
+    private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io)
     {
         $configFile = sprintf('%s/config/config.php', $path);
         if (! file_exists($configFile)) {
+            return;
+        }
+
+        if ($disableConfigProcessorInjection) {
+            $io->writeln(
+                '<info>Skipping injection of bridge configuration post processor'
+                . ' by request (--no-config-processor)</info>'
+            );
             return;
         }
 
