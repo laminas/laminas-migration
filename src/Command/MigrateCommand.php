@@ -40,19 +40,16 @@ If you wish to specify a path other than the current working directory, use the
 <info>Excluding Files</info>
 <info>---------------</info>
 
-If you wish to exclude all files under a given directory from migration, use
+If you wish to EXCLUDE files or a directory from migration, use
 the --exclude (or -e) option. A common use case for that is "--exclude data"
 or "--exclude data/cache". The --exclude option can be issued multiple times,
-one for each directory you wish to exclude.
+one for each directory or file you wish to exclude.
 
-To exclude individual files, use the --exclude-file (-x) option. This option
-can also be issued multiple times.
-
-To provide a regular expression filter for matching files to rewrite, use the
---filter (-f) option. The regexp provided should not contain delimiters (the
-tooling use "#" as the delimiter). Files that match the regular expression will
-be rewritten. This option can also be issued multiple times; if a file matches
-any filter, it will be rewritten. As an example:
+To provide a regular expression filter for explicitly MATCHING files to
+rewrite, use the --filter (-f) option. The regexp provided should not contain
+delimiters (the tooling use "#" as the delimiter). Files that match the regular
+expression will be rewritten. This option can also be issued multiple times; if
+a file matches any filter, it will be rewritten. As an example:
 
   laminas-migrate -f "\.(php|php\.dist|phtml|json)$" \
   > -f "Dockerfile" \
@@ -61,6 +58,9 @@ any filter, it will be rewritten. As an example:
 The above would only rewrite files with the suffixes ".php", ".php.dist",
 ".phtml", and ".json", as well as Dockerfiles and scripts matching the name
 "php-entrypoint".
+
+NOTE: if a file matches BOTH a --filter AND an --exclude rule, it will be
+excluded.
 
 <info>Injections</info>
 <info>----------</info>
@@ -99,26 +99,22 @@ EOH;
             ->addArgument(
                 'path',
                 InputArgument::OPTIONAL,
-                'The path to the project/library to migrate',
+                'The path to the project/library to migrate.',
                 getcwd()
             )
             ->addOption(
                 'exclude',
                 'e',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Directories in which to exclude rewrites. Always excludes .git and the configured vendor directories.'
-            )
-            ->addOption(
-                'exclude-file',
-                'x',
-                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Individual files in which to exclude rewrites.'
+                'Directories or files in which to exclude rewrites.'
+                . ' Always excludes the configured vendor directory and VCS directories.'
             )
             ->addOption(
                 'filter',
                 'f',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Filters'
+                'Regex filters describing specific files to migrate.'
+                . ' Files not matching the provided pattern(s) will not be migrated.'
             )
             ->addOption(
                 'no-config-processor',
@@ -235,8 +231,8 @@ EOH;
     {
         $composer  = json_decode(file_get_contents($path . '/composer.json'), true);
         return isset($composer['config']['vendor-dir'])
-            ? realpath($path) . '/' . $composer['config']['vendor-dir'] . '/'
-            : realpath($path) . '/vendor/';
+            ? sprintf('%s/%s/', $path, $composer['config']['vendor-dir'])
+            : sprintf('%s/vendor/', $path);
     }
 
     /**
@@ -301,11 +297,7 @@ EOH;
         $files = new RecursiveCallbackFilterIterator(
             $dir,
             static function (SplFileInfo $current, $key, $iterator) use ($filter) {
-                if ($iterator->hasChildren()) {
-                    return true;
-                }
-
-                if ($current->isFile() && $filter($current->getPathname())) {
+                if ($filter($current)) {
                     return true;
                 }
 
@@ -322,10 +314,10 @@ EOH;
      */
     private function createFilter($path, InputInterface $input)
     {
-        $filters = [];
-        $filters = $this->createFileFilter($input->getOption('filter'), $path, $filters);
-        $filters = $this->createDirectoryExclusionChecker($input->getOption('exclude'), $path, $filters);
-        $filters = $this->createFileExclusionChecker($input->getOption('exclude-file'), $path, $filters);
+        $filters = [
+            $this->createRegexFilter($input->getOption('filter')),
+            $this->createExcludeFilter($input->getOption('exclude'), $path),
+        ];
 
         return static function ($path) use ($filters) {
             foreach ($filters as $filter) {
@@ -338,106 +330,100 @@ EOH;
     }
 
     /**
-     * @param string[] $fileFilters Regular expressions to test against
-     * @param string $path
-     * @param callable[] $filters
-     * @return array The $filters array with the new file filter
-     *     appended, if created.
+     * @param string[] $regexFilters Regular expressions to test against
+     * @return callable
      */
-    private function createFileFilter(array $fileFilters, $path, array $filters)
+    private function createRegexFilter(array $regexFilters)
     {
-        if (empty($filters)) {
-            return $filters;
+        // If no filters are present, we always attempt to process the file.
+        if (empty($regexFilters)) {
+            /**
+             * @return bool Always returns true.
+             */
+            return function () {
+                return true;
+            };
         }
 
         /**
-         * @param string $path
-         * @return bool
+         * @return bool True if the file matches any filter; false otherwise.
          */
-        $filters[] = static function ($path) use ($fileFilters) {
-            foreach ($fileFilters as $filter) {
-                $pattern = sprintf('#%s#', $filter);
+        return static function (SplFileInfo $file) use ($regexFilters) {
+            // Don't handle non-file values
+            if (! $file->isFile()) {
+                return true;
+            }
+
+            $path = $file->getPathname();
+            foreach ($regexFilters as $regex) {
+                $pattern = sprintf('#%s#', $regex);
                 if (preg_match($pattern, $path)) {
-                    // If any filter matches, we process the file
+                    // If any filter matches, we process the file.
                     return true;
                 }
             }
-            // No filter matched
+
+            // If no filter matches, we do not process the file.
             return false;
         };
-
-        return $filters;
     }
 
     /**
-     * @param string[] $excludePaths
-     * @param string $path
-     * @param callable[] $filters
-     * @return array The $filters array with the new exclusion filter
-     *     appended. This one is always added, as it ensures exclusion of the
-     *     vendor and .git directories.
+     * @param string[] $exclusions Paths to exclude
+     * @param string $projectPath Project path
+     * @return callable
      */
-    private function createDirectoryExclusionChecker(array $excludePaths, $path, array $filters)
+    private function createExcludeFilter(array $exclusions, $projectPath)
     {
-        /**
-         * @param string $path
-         * @return string
-         */
-        $normalization = static function ($path) {
-            return sprintf('/%s/', trim($path, '/\\'));
-        };
-
-        // Normalize paths to ensure they are searched as directory segments
-        $excludePaths = array_map($normalization, $excludePaths);
-
         // Prepend most common exclusions
-        array_unshift($excludePaths, $this->locateVendorDirectory($path));
-        array_unshift($excludePaths, '/.git/');
+        array_unshift($exclusions, sprintf('%s/.hg', $projectPath));
+        array_unshift($exclusions, sprintf('%s/.svn', $projectPath));
+        array_unshift($exclusions, sprintf('%s/.git', $projectPath));
+        array_unshift($exclusions, $this->locateVendorDirectory($projectPath));
+
+        // Create list of directory patterns to check against
+        $directoryMatches = array_map(function ($exclusion) {
+            return sprintf('/%s', trim($exclusion, '/\\'));
+        }, $exclusions);
+
+        // Create list of filenames to check against
+        $fileMatches = array_map(function ($exclusion) {
+            return sprintf('#%s$#', preg_quote($exclusion, '|'));
+        }, $exclusions);
 
         /**
-         * @param string $path
          * @return bool
          */
-        $filters[] = static function ($path) use ($excludePaths) {
-            foreach ($excludePaths as $excludePath) {
-                if (strpos($path, $excludePath) !== false) {
+        return static function (SplFileInfo $file) use ($directoryMatches, $fileMatches) {
+            $path = $file->getPathname();
+
+            // Handle directories
+            if ($file->isDir()) {
+                foreach ($directoryMatches as $exclusion) {
+                    if (strpos($path, $exclusion) !== false) {
+                        // Matched an exclusion; do not recurse
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            // Non-directory, non-files cannot be rewritten
+            if (! $file->isFile()) {
+                return false;
+            }
+
+            // Handle files
+            foreach ($fileMatches as $exclusion) {
+                if (preg_match($exclusion, $path)) {
+                    // File matches exclusion pattern; do not process
                     return false;
                 }
             }
+
             return true;
         };
-
-        return $filters;
-    }
-
-    /**
-     * @param string[] $excludePaths
-     * @param string $path
-     * @param callable[] $filters
-     * @return array The $filters array with the new exclusion filter
-     *     appended, if created.
-     */
-    private function createFileExclusionChecker(array $excludePaths, $path, array $filters)
-    {
-        if (empty($filters)) {
-            return $filters;
-        }
-
-        /**
-         * @param string $path
-         * @return bool
-         */
-        $filters[] = static function ($path) use ($excludePaths) {
-            foreach ($excludePaths as $excludePath) {
-                $pattern = sprintf('|%s$|', preg_quote($excludePath, '|'));
-                if (preg_match($pattern, $path)) {
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        return $filters;
     }
 
     /**
