@@ -340,7 +340,7 @@ EOH;
             /**
              * @return bool Always returns true.
              */
-            return function () {
+            return static function () {
                 return true;
             };
         }
@@ -382,12 +382,12 @@ EOH;
         array_unshift($exclusions, $this->locateVendorDirectory($projectPath));
 
         // Create list of directory patterns to check against
-        $directoryMatches = array_map(function ($exclusion) {
+        $directoryMatches = array_map(static function ($exclusion) {
             return sprintf('/%s', trim($exclusion, '/\\'));
         }, $exclusions);
 
         // Create list of filenames to check against
-        $fileMatches = array_map(function ($exclusion) {
+        $fileMatches = array_map(static function ($exclusion) {
             return sprintf('#%s$#', preg_quote($exclusion, '|'));
         }, $exclusions);
 
