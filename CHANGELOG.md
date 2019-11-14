@@ -2,15 +2,19 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.10 - TBD
+## 0.1.10 - 2019-11-14
 
 ### Added
 
-- Nothing.
+- [#12](https://github.com/laminas/laminas-migration/pull/12) adds full documentation of the `migrate` command. To view the documentation, type `laminas-migration help migrate`.
+
+- [#12](https://github.com/laminas/laminas-migration/pull/12) adds the option `--filter`. The option may be invoked multiple times, and expects regular expressions, minus any delimiters. When present, only files matching one or more filters will be migrated.
+
+- [#12](https://github.com/laminas/laminas-migration/pull/12) adds the option `--no-config-processor`. If provided, the tooling will not attempt to inject the bridge Module or ConfigPostProcessor if it otherwise would.
 
 ### Changed
 
-- Nothing.
+- [#12](https://github.com/laminas/laminas-migration/pull/12) updates the `--exclude` option to also allow providing file names.
 
 ### Deprecated
 
