@@ -390,7 +390,7 @@ EOH;
 
         // Create list of filenames to check against
         $fileMatches = array_map(static function ($exclusion) {
-            return sprintf('#%s$#', preg_quote($exclusion, '|'));
+            return sprintf('#%s$#', preg_quote($exclusion, '#'));
         }, $exclusions);
 
         /**
