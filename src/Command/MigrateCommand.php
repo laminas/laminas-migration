@@ -154,7 +154,7 @@ EOH;
         $this->removeComposerLock($path, $io);
         $this->removeVendorDirectory($path, $io);
         $this->injectDependencyPlugin($path, $input->getOption('no-plugin'), $io);
-        $this->migrateProjectFiles($path, $this->createExclusionChecker($path, $input), $io);
+        $this->migrateProjectFiles($path, $this->createFilter($path, $input), $io);
 
         $disableConfigProcessorInjection = $input->getOption('no-config-processor');
         $this->injectBridgeModule($path, $disableConfigProcessorInjection, $io);
@@ -258,10 +258,10 @@ EOH;
     /**
      * @param string $path
      */
-    private function migrateProjectFiles($path, callable $exclude, SymfonyStyle $io)
+    private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io)
     {
         $io->writeln('<info>Performing migration replacements</info>');
-        foreach ($this->findProjectFiles($path, $exclude) as $file) {
+        foreach ($this->findProjectFiles($path, $filter) as $file) {
             $this->performReplacements($file->getRealPath(), $path);
         }
     }
@@ -291,7 +291,7 @@ EOH;
      * @param string $path
      * @return RecursiveIteratorIterator|SplFileInfo[]
      */
-    private function findProjectFiles($path, callable $exclude)
+    private function findProjectFiles($path, callable $filter)
     {
         $dir = new RecursiveDirectoryIterator(
             $path,
@@ -300,12 +300,12 @@ EOH;
 
         $files = new RecursiveCallbackFilterIterator(
             $dir,
-            static function (SplFileInfo $current, $key, $iterator) use ($exclude) {
+            static function (SplFileInfo $current, $key, $iterator) use ($filter) {
                 if ($iterator->hasChildren()) {
                     return true;
                 }
 
-                if ($current->isFile() && ! $exclude($current->getPathname())) {
+                if ($current->isFile() && ! $filter($current->getPathname())) {
                     return true;
                 }
 
@@ -320,16 +320,16 @@ EOH;
      * @param string $path
      * @return callable
      */
-    private function createExclusionChecker($path, InputInterface $input)
+    private function createFilter($path, InputInterface $input)
     {
-        $exclusions = [];
-        $exclusions = $this->createFileFilter($input->getOption('filter'), $path, $exclusions);
-        $exclusions = $this->createDirectoryExclusionChecker($input->getOption('exclude'), $path, $exclusions);
-        $exclusions = $this->createFileExclusionChecker($input->getOption('exclude-file'), $path, $exclusions);
+        $filters = [];
+        $filters = $this->createFileFilter($input->getOption('filter'), $path, $filters);
+        $filters = $this->createDirectoryExclusionChecker($input->getOption('exclude'), $path, $filters);
+        $filters = $this->createFileExclusionChecker($input->getOption('exclude-file'), $path, $filters);
 
-        return static function ($path) use ($exclusions) {
-            foreach ($exclusions as $exclude) {
-                if ($exclude($path)) {
+        return static function ($path) use ($filters) {
+            foreach ($filters as $filter) {
+                if ($filter($path)) {
                     return true;
                 }
             }
@@ -338,24 +338,24 @@ EOH;
     }
 
     /**
-     * @param string[] $excludePaths
+     * @param string[] $fileFilters Regular expressions to test against
      * @param string $path
-     * @param callable[] $exclusions
-     * @return array The $exclusions array with the new exclusion filter
+     * @param callable[] $filters
+     * @return array The $filters array with the new file filter
      *     appended, if created.
      */
-    private function createFileFilter(array $filters, $path, array $exclusions)
+    private function createFileFilter(array $fileFilters, $path, array $filters)
     {
         if (empty($filters)) {
-            return $exclusions;
+            return $filters;
         }
 
         /**
          * @param string $path
          * @return bool
          */
-        $exclusions[] = static function ($path) use ($filters) {
-            foreach ($filters as $filter) {
+        $filters[] = static function ($path) use ($fileFilters) {
+            foreach ($fileFilters as $filter) {
                 $pattern = sprintf('#%s#', $filter);
                 if (preg_match($pattern, $path)) {
                     // If any filter matches, we process the file
@@ -366,18 +366,18 @@ EOH;
             return true;
         };
 
-        return $exclusions;
+        return $filters;
     }
 
     /**
      * @param string[] $excludePaths
      * @param string $path
-     * @param callable[] $exclusions
-     * @return array The $exclusions array with the new exclusion filter
+     * @param callable[] $filters
+     * @return array The $filters array with the new exclusion filter
      *     appended. This one is always added, as it ensures exclusion of the
      *     vendor and .git directories.
      */
-    private function createDirectoryExclusionChecker(array $excludePaths, $path, array $exclusions)
+    private function createDirectoryExclusionChecker(array $excludePaths, $path, array $filters)
     {
         /**
          * @param string $path
@@ -398,7 +398,7 @@ EOH;
          * @param string $path
          * @return bool
          */
-        $exclusions[] = static function ($path) use ($excludePaths) {
+        $filters[] = static function ($path) use ($excludePaths) {
             foreach ($excludePaths as $excludePath) {
                 if (strpos($path, $excludePath) !== false) {
                     return true;
@@ -407,27 +407,27 @@ EOH;
             return false;
         };
 
-        return $exclusions;
+        return $filters;
     }
 
     /**
      * @param string[] $excludePaths
      * @param string $path
-     * @param callable[] $exclusions
-     * @return array The $exclusions array with the new exclusion filter
+     * @param callable[] $filters
+     * @return array The $filters array with the new exclusion filter
      *     appended, if created.
      */
-    private function createFileExclusionChecker(array $excludePaths, $path, array $exclusions)
+    private function createFileExclusionChecker(array $excludePaths, $path, array $filters)
     {
-        if (empty($excludePaths)) {
-            return $exclusions;
+        if (empty($filters)) {
+            return $filters;
         }
 
         /**
          * @param string $path
          * @return bool
          */
-        $exclusions[] = static function ($path) use ($excludePaths) {
+        $filters[] = static function ($path) use ($excludePaths) {
             foreach ($excludePaths as $excludePath) {
                 $pattern = sprintf('|%s$|', preg_quote($excludePath, '|'));
                 if (preg_match($pattern, $path)) {
@@ -437,7 +437,7 @@ EOH;
             return false;
         };
 
-        return $exclusions;
+        return $filters;
     }
 
     /**
