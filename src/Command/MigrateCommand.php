@@ -305,7 +305,7 @@ EOH;
                     return true;
                 }
 
-                if ($current->isFile() && ! $filter($current->getPathname())) {
+                if ($current->isFile() && $filter($current->getPathname())) {
                     return true;
                 }
 
@@ -329,11 +329,11 @@ EOH;
 
         return static function ($path) use ($filters) {
             foreach ($filters as $filter) {
-                if ($filter($path)) {
-                    return true;
+                if (! $filter($path)) {
+                    return false;
                 }
             }
-            return false;
+            return true;
         };
     }
 
@@ -359,11 +359,11 @@ EOH;
                 $pattern = sprintf('#%s#', $filter);
                 if (preg_match($pattern, $path)) {
                     // If any filter matches, we process the file
-                    return false;
+                    return true;
                 }
             }
             // No filter matched
-            return true;
+            return false;
         };
 
         return $filters;
@@ -401,10 +401,10 @@ EOH;
         $filters[] = static function ($path) use ($excludePaths) {
             foreach ($excludePaths as $excludePath) {
                 if (strpos($path, $excludePath) !== false) {
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         };
 
         return $filters;
@@ -431,10 +431,10 @@ EOH;
             foreach ($excludePaths as $excludePath) {
                 $pattern = sprintf('|%s$|', preg_quote($excludePath, '|'));
                 if (preg_match($pattern, $path)) {
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         };
 
         return $filters;
