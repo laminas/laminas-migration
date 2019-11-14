@@ -20,6 +20,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use const DIRECTORY_SEPARATOR;
+
 class MigrateCommand extends Command
 {
     const HELP = <<< EOH
@@ -231,8 +233,8 @@ EOH;
     {
         $composer  = json_decode(file_get_contents($path . '/composer.json'), true);
         return isset($composer['config']['vendor-dir'])
-            ? sprintf('%s/%s/', $path, $composer['config']['vendor-dir'])
-            : sprintf('%s/vendor/', $path);
+            ? sprintf('%s%s%s', $path, DIRECTORY_SEPARATOR, $composer['config']['vendor-dir'])
+            : sprintf('%s%svendor', $path, DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -376,14 +378,14 @@ EOH;
     private function createExcludeFilter(array $exclusions, $projectPath)
     {
         // Prepend most common exclusions
-        array_unshift($exclusions, sprintf('%s/.hg', $projectPath));
-        array_unshift($exclusions, sprintf('%s/.svn', $projectPath));
-        array_unshift($exclusions, sprintf('%s/.git', $projectPath));
+        array_unshift($exclusions, sprintf('%s%s.hg', $projectPath, DIRECTORY_SEPARATOR));
+        array_unshift($exclusions, sprintf('%s%s.svn', $projectPath, DIRECTORY_SEPARATOR));
+        array_unshift($exclusions, sprintf('%s%s.git', $projectPath, DIRECTORY_SEPARATOR));
         array_unshift($exclusions, $this->locateVendorDirectory($projectPath));
 
         // Create list of directory patterns to check against
         $directoryMatches = array_map(static function ($exclusion) {
-            return sprintf('/%s', trim($exclusion, '/\\'));
+            return sprintf('%s%s', DIRECTORY_SEPARATOR, trim($exclusion, '/\\'));
         }, $exclusions);
 
         // Create list of filenames to check against
