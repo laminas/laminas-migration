@@ -358,6 +358,7 @@ EOH;
 
             $path = $file->getPathname();
             foreach ($regexFilters as $regex) {
+                // Pattern is not quoted, to allow quantities, character sets, and grouping
                 $pattern = sprintf('#%s#', $regex);
                 if (preg_match($pattern, $path)) {
                     // If any filter matches, we process the file.
@@ -390,6 +391,8 @@ EOH;
 
         // Create list of filenames to check against
         $fileMatches = array_map(static function ($exclusion) {
+            // Pattern is quoted, as it should be a literal. We want to match
+            // files as the end segment of a path.
             return sprintf('#%s$#', preg_quote($exclusion, '#'));
         }, $exclusions);
 
