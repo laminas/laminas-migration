@@ -18,18 +18,18 @@ use RuntimeException;
 
 class FileFilterTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->cleanDirectories();
         $this->prepareDirectories();
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->cleanDirectories();
     }
 
-    public function cleanDirectories() : void
+    public function cleanDirectories(): void
     {
         $directory = new Directory();
         $baseDir = dirname(__DIR__);
@@ -41,7 +41,7 @@ class FileFilterTest extends TestCase
         }
     }
 
-    public function prepareDirectories() : void
+    public function prepareDirectories(): void
     {
         $baseDir = dirname(__DIR__);
         foreach (['.hg', '.svn'] as $dir) {
@@ -54,7 +54,7 @@ class FileFilterTest extends TestCase
         }
     }
 
-    public function getDirectoryIterator($path) : RecursiveDirectoryIterator
+    public function getDirectoryIterator($path): RecursiveDirectoryIterator
     {
         return new RecursiveDirectoryIterator(
             $path,
@@ -74,7 +74,11 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
-            $this->assertNotRegExp('!/\.(git|hg|svn)(/|$)!', $file->getRealPath(), 'One or more files matched a VCS directory');
+            $this->assertNotRegExp(
+                '!/\.(git|hg|svn)(/|$)!',
+                $file->getRealPath(),
+                'One or more files matched a VCS directory'
+            );
         }
     }
 
@@ -90,7 +94,11 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
-            $this->assertNotRegExp('!/vendor(/|$)!', $file->getRealPath(), 'One or more files matched a VCS directory');
+            $this->assertNotRegExp(
+                '!/vendor(/|$)!',
+                $file->getRealPath(),
+                'One or more files matched a VCS directory'
+            );
         }
     }
 
@@ -111,7 +119,11 @@ class FileFilterTest extends TestCase
         }, $exclusions));
 
         foreach ($files as $file) {
-            $this->assertNotRegExp('!/(' . $pattern . ')$!', $file->getRealPath(), 'One or more files matched a VCS directory');
+            $this->assertNotRegExp(
+                '!/(' . $pattern . ')$!',
+                $file->getRealPath(),
+                'One or more files matched a VCS directory'
+            );
         }
     }
 

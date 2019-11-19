@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class DirectoryTest extends TestCase
 {
-    public function pathsToNormalize() : iterable
+    public function pathsToNormalize(): iterable
     {
         yield 'unix'    => ['/home/user/project', '/home/user/project'];
         yield 'windows' => ['C:\Users\user\project', 'C:/Users/user/project'];
@@ -22,7 +22,7 @@ class DirectoryTest extends TestCase
     /**
      * @dataProvider pathsToNormalize
      */
-    public function testNormalizePathNormalizesToUnixPaths(string $original, string $expected) : void
+    public function testNormalizePathNormalizesToUnixPaths(string $original, string $expected): void
     {
         $dir = new Directory();
         $this->assertSame($expected, $dir->normalizePath($original));
