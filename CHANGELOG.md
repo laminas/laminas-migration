@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.11 - TBD
+## 0.1.11 - 2019-11-19
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#13](https://github.com/laminas/laminas-migration/pull/13) fixes cross-platform compatibility when comparing paths for purposes of filtering/excluding files.
 
 ## 0.1.10 - 2019-11-14
 
