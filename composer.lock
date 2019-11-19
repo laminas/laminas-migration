@@ -8,23 +8,24 @@
     "packages": [
         {
             "name": "laminas/laminas-zendframework-bridge",
-            "version": "0.3.7",
+            "version": "0.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "6524baeca2a44a7e1423254775f5c41873d9c358"
+                "reference": "706cb6b2b548fe7ce2cc1dce51b6c92f8f562043"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6524baeca2a44a7e1423254775f5c41873d9c358",
-                "reference": "6524baeca2a44a7e1423254775f5c41873d9c358",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/706cb6b2b548fe7ce2cc1dce51b6c92f8f562043",
+                "reference": "706cb6b2b548fe7ce2cc1dce51b6c92f8f562043",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1"
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1",
+                "squizlabs/php_codesniffer": "^3.5"
             },
             "type": "library",
             "extra": {
@@ -54,7 +55,7 @@
                 "laminas",
                 "zf"
             ],
-            "time": "2019-11-12T18:22:37+00:00"
+            "time": "2019-11-14T15:47:19+00:00"
         },
         {
             "name": "psr/container",
@@ -425,16 +426,16 @@
         },
         {
             "name": "phpcompatibility/php-compatibility",
-            "version": "9.3.3",
+            "version": "9.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
-                "reference": "1af08ca3861048a8bfb39d0405d0ac3e50ba2696"
+                "reference": "1f37659196e4f3113ea506a7efba201c52303bf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/1af08ca3861048a8bfb39d0405d0ac3e50ba2696",
-                "reference": "1af08ca3861048a8bfb39d0405d0ac3e50ba2696",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/1f37659196e4f3113ea506a7efba201c52303bf1",
+                "reference": "1f37659196e4f3113ea506a7efba201c52303bf1",
                 "shasum": ""
             },
             "require": {
@@ -479,7 +480,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-11-11T03:25:23+00:00"
+            "time": "2019-11-15T04:12:02+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -487,12 +488,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "e3e6456e753326a096303e96b0f759fe789e63e8"
+                "reference": "40fb2c205dd261ab6bb42ec29545934f0db7026f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/e3e6456e753326a096303e96b0f759fe789e63e8",
-                "reference": "e3e6456e753326a096303e96b0f759fe789e63e8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/40fb2c205dd261ab6bb42ec29545934f0db7026f",
+                "reference": "40fb2c205dd261ab6bb42ec29545934f0db7026f",
                 "shasum": ""
             },
             "conflict": {
@@ -560,7 +561,7 @@
                 "league/commonmark": "<0.18.3",
                 "magento/magento1ce": "<1.9.4.3",
                 "magento/magento1ee": ">=1,<1.14.4.3",
-                "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.3",
+                "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.2",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
                 "onelogin/php-saml": "<2.10.4",
@@ -629,7 +630,7 @@
                 "symfony/security-guard": ">=2.8,<2.8.41|>=3,<3.3.17|>=3.4,<3.4.11|>=4,<4.0.11",
                 "symfony/security-http": ">=2.3,<2.3.41|>=2.4,<2.7.51|>=2.8,<2.8.50|>=3,<3.4.26|>=4,<4.2.12|>=4.3,<4.3.8",
                 "symfony/serializer": ">=2,<2.0.11",
-                "symfony/symfony": ">=2,<2.7.51|>=2.8,<2.8.50|>=3,<3.4.26|>=4,<4.1.12|>=4.2,<4.2.7",
+                "symfony/symfony": ">=2,<2.8.52|>=3,<3.4.35|>=4,<4.2.12|>=4.3,<4.3.8",
                 "symfony/translation": ">=2,<2.0.17",
                 "symfony/validator": ">=2,<2.0.24|>=2.1,<2.1.12|>=2.2,<2.2.5|>=2.3,<2.3.3",
                 "symfony/var-exporter": ">=4.2,<4.2.12|>=4.3,<4.3.8",
@@ -697,7 +698,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-11-13T10:25:51+00:00"
+            "time": "2019-11-19T14:18:57+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
