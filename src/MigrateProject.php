@@ -35,7 +35,6 @@ class MigrateProject
     {
         $io->writeln('<info>Performing migration replacements</info>');
         foreach ($this->traverseFiles($path, $filter) as $file) {
-            $io->writeln(sprintf('- Examining file %s', $file->getRealPath()));
             $this->performReplacements($file->getRealPath(), $path);
         }
     }
