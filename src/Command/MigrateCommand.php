@@ -8,7 +8,14 @@
 
 namespace Laminas\Migration\Command;
 
+use Laminas\Migration\BridgeConfigPostProcessor;
+use Laminas\Migration\BridgeModule;
+use Laminas\Migration\ComposerLockFile;
+use Laminas\Migration\DependencyPlugin;
+use Laminas\Migration\FileFilter;
 use Laminas\Migration\Helper;
+use Laminas\Migration\MigrateProject;
+use Laminas\Migration\VendorDirectory;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -191,11 +198,8 @@ EOH;
      */
     private function removeComposerLock($path, SymfonyStyle $io)
     {
-        if (! file_exists($path . '/composer.lock')) {
-            return;
-        }
-        $io->writeln('<info>Removing composer.lock</info>');
-        unlink($path . '/composer.lock');
+        $composerLockFile = new ComposerLockFile();
+        $composerLockFile->remove($path, $io);
     }
 
     /**
@@ -203,38 +207,8 @@ EOH;
      */
     private function removeVendorDirectory($path, SymfonyStyle $io)
     {
-        $vendorDir = $this->locateVendorDirectory($path);
-        if (! is_dir($vendorDir)) {
-            return;
-        }
-        $io->writeln('<info>Removing configured vendor directory</info>');
-        $this->removeDirectory($vendorDir);
-    }
-
-    private function removeDirectory($path)
-    {
-        foreach (scandir($path) as $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
-            $test = sprintf('%s/%s', $path, $file);
-            is_dir($test) && ! is_link($test)
-                ? $this->removeDirectory($test)
-                : unlink($test);
-        }
-        rmdir($path);
-    }
-
-    /**
-     * @param string $path Project path
-     * @return string Location of vendor directory
-     */
-    private function locateVendorDirectory($path)
-    {
-        $composer  = json_decode(file_get_contents($path . '/composer.json'), true);
-        return isset($composer['config']['vendor-dir'])
-            ? sprintf('%s%s%s', $path, DIRECTORY_SEPARATOR, $composer['config']['vendor-dir'])
-            : sprintf('%s%svendor', $path, DIRECTORY_SEPARATOR);
+        $vendorDirectory = new VendorDirectory();
+        $vendorDirectory->remove($path, $io);
     }
 
     /**
@@ -243,14 +217,8 @@ EOH;
      */
     private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io)
     {
-        if ($noPluginOption) {
-            return;
-        }
-
-        $io->writeln('<info>Injecting laminas-dependency-plugin into composer.json</info>');
-        $json = json_decode(file_get_contents($path . '/composer.json'), true);
-        $json['require']['laminas/laminas-dependency-plugin'] = '^0.1.2';
-        Helper::writeJson($path . '/composer.json', $json);
+        $dependencyPlugin = new DependencyPlugin();
+        $dependencyPlugin->inject($path, $noPluginOption, $io);
     }
 
     /**
@@ -258,56 +226,8 @@ EOH;
      */
     private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io)
     {
-        $io->writeln('<info>Performing migration replacements</info>');
-        foreach ($this->findProjectFiles($path, $filter) as $file) {
-            $this->performReplacements($file->getRealPath(), $path);
-        }
-    }
-
-    /**
-     * Perform replacements in $file, and rename $file if necessary
-     *
-     * @param string $file File being examined and updated
-     * @param string $path Project root path
-     * @return void
-     */
-    private function performReplacements($file, $path)
-    {
-        $content = file_get_contents($file);
-        $content = Helper::replace($content);
-        file_put_contents($file, $content);
-
-        // Only rewrite the portion under the project root path.
-        $newName = sprintf('%s/%s', $path, Helper::replace(substr($file, strlen($path) + 1)));
-        if ($newName !== $file) {
-            $this->createNewDirectory($newName);
-            rename($file, $newName);
-        }
-    }
-
-    /**
-     * @param string $path
-     * @return RecursiveIteratorIterator|SplFileInfo[]
-     */
-    private function findProjectFiles($path, callable $filter)
-    {
-        $dir = new RecursiveDirectoryIterator(
-            $path,
-            RecursiveDirectoryIterator::SKIP_DOTS | RecursiveDirectoryIterator::UNIX_PATHS
-        );
-
-        $files = new RecursiveCallbackFilterIterator(
-            $dir,
-            static function (SplFileInfo $current, $key, $iterator) use ($filter) {
-                if ($filter($current)) {
-                    return true;
-                }
-
-                return false;
-            }
-        );
-
-        return new RecursiveIteratorIterator($files);
+        $migration = new MigrateProject();
+        $migration($path, $filter, $io);
     }
 
     /**
@@ -316,135 +236,11 @@ EOH;
      */
     private function createFilter($path, InputInterface $input)
     {
-        $filters = [
-            $this->createRegexFilter($input->getOption('filter')),
-            $this->createExcludeFilter($input->getOption('exclude'), $path),
-        ];
-
-        return static function ($path) use ($filters) {
-            foreach ($filters as $filter) {
-                if (! $filter($path)) {
-                    return false;
-                }
-            }
-            return true;
-        };
-    }
-
-    /**
-     * @param string[] $regexFilters Regular expressions to test against
-     * @return callable
-     */
-    private function createRegexFilter(array $regexFilters)
-    {
-        // If no filters are present, we always attempt to process the file.
-        if (empty($regexFilters)) {
-            /**
-             * @return bool Always returns true.
-             */
-            return static function () {
-                return true;
-            };
-        }
-
-        /**
-         * @return bool True if the file matches any filter; false otherwise.
-         */
-        return static function (SplFileInfo $file) use ($regexFilters) {
-            // Don't handle non-file values
-            if (! $file->isFile()) {
-                return true;
-            }
-
-            $path = $file->getPathname();
-            foreach ($regexFilters as $regex) {
-                // Pattern is not quoted, to allow quantities, character sets, and grouping
-                $pattern = sprintf('#%s#', $regex);
-                if (preg_match($pattern, $path)) {
-                    // If any filter matches, we process the file.
-                    return true;
-                }
-            }
-
-            // If no filter matches, we do not process the file.
-            return false;
-        };
-    }
-
-    /**
-     * @param string[] $exclusions Paths to exclude
-     * @param string $projectPath Project path
-     * @return callable
-     */
-    private function createExcludeFilter(array $exclusions, $projectPath)
-    {
-        // Prepend most common exclusions
-        array_unshift($exclusions, sprintf('%s%s.hg', $projectPath, DIRECTORY_SEPARATOR));
-        array_unshift($exclusions, sprintf('%s%s.svn', $projectPath, DIRECTORY_SEPARATOR));
-        array_unshift($exclusions, sprintf('%s%s.git', $projectPath, DIRECTORY_SEPARATOR));
-        array_unshift($exclusions, $this->locateVendorDirectory($projectPath));
-
-        // Create list of directory patterns to check against
-        $directoryMatches = array_map(static function ($exclusion) {
-            return sprintf('%s%s', DIRECTORY_SEPARATOR, trim($exclusion, '/\\'));
-        }, $exclusions);
-
-        // Create list of filenames to check against
-        $fileMatches = array_map(static function ($exclusion) {
-            // Pattern is quoted, as it should be a literal. We want to match
-            // files as the end segment of a path.
-            return sprintf('#%s$#', preg_quote($exclusion, '#'));
-        }, $exclusions);
-
-        /**
-         * @return bool
-         */
-        return static function (SplFileInfo $file) use ($directoryMatches, $fileMatches) {
-            $path = $file->getPathname();
-
-            // Handle directories
-            if ($file->isDir()) {
-                foreach ($directoryMatches as $exclusion) {
-                    if (strpos($path, $exclusion) !== false) {
-                        // Matched an exclusion; do not recurse
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            // Non-directory, non-files cannot be rewritten
-            if (! $file->isFile()) {
-                return false;
-            }
-
-            // Handle files
-            foreach ($fileMatches as $exclusion) {
-                if (preg_match($exclusion, $path)) {
-                    // File matches exclusion pattern; do not process
-                    return false;
-                }
-            }
-
-            return true;
-        };
-    }
-
-    /**
-     * If the path provided references a directory that does not yet exist,
-     * create it.
-     *
-     * @param string $path
-     * @return void
-     */
-    private function createNewDirectory($path)
-    {
-        $directory = dirname($path);
-        if (is_dir($directory)) {
-            return;
-        }
-        mkdir($directory, 0775, $recursive = true);
+        return new FileFilter(
+            $path,
+            $input->getOption('filter'),
+            $input->getOption('exclude')
+        );
     }
 
     /**
@@ -453,41 +249,8 @@ EOH;
      */
     private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io)
     {
-        $modulesConfig = sprintf('%s/config/modules.config.php', $path);
-        if (! file_exists($modulesConfig)) {
-            return;
-        }
-
-        if ($disableConfigProcessorInjection) {
-            $io->writeln('<info>Skipping injection of bridge module by request (--no-config-processor)</info>');
-            return;
-        }
-
-        $io->writeln(sprintf(
-            '<info>Injecting Laminas\ZendFrameworkBridge module into %s</info>',
-            $modulesConfig
-        ));
-
-        $contents = file_get_contents($modulesConfig);
-        if (! preg_match('/(?<prelude>return\s+(array\(|\[))(?<space>\s+)/s', $contents, $matches)) {
-            $io->error('- File is not in expected format; aborting injection');
-            $io->text(
-                'You will need to manually add an entry for "Laminas\ZendFrameworkBridge"'
-                . ' in your module configuration.'
-            );
-            return;
-        }
-
-        $search = $matches['prelude'] . $matches['space'];
-        $replacement = sprintf(
-            '%s%s\'Laminas\ZendFrameworkBridge\',%s',
-            $matches['prelude'],
-            $matches['space'],
-            $matches['space']
-        );
-        $newContents = str_replace($search, $replacement, $contents);
-
-        file_put_contents($modulesConfig, $newContents);
+        $bridgeModule = new BridgeModule();
+        $bridgeModule->inject($path, $disableConfigProcessorInjection, $io);
     }
 
     /**
@@ -496,41 +259,7 @@ EOH;
      */
     private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io)
     {
-        $configFile = sprintf('%s/config/config.php', $path);
-        if (! file_exists($configFile)) {
-            return;
-        }
-
-        if ($disableConfigProcessorInjection) {
-            $io->writeln(
-                '<info>Skipping injection of bridge configuration post processor'
-                . ' by request (--no-config-processor)</info>'
-            );
-            return;
-        }
-
-        $io->writeln(sprintf(
-            '<info>Injecting Laminas\ZendFrameworkBridge\ConfigPostProcessor into %s</info>',
-            $configFile
-        ));
-
-        $contents = file_get_contents($configFile);
-        if (! preg_match('/(?<prelude>\$cacheConfig\[\'config_cache_path\'\])\);/s', $contents, $matches)) {
-            $io->error('- File is not in expected format; aborting injection');
-            $io->text(
-                'You will need to manually add the "Laminas\ZendFrameworkBridge\ConfigPostProcessor"'
-                . ' in your ConfigAggregator initialization.'
-            );
-            return;
-        }
-
-        $search = $matches['prelude'];
-        $replacement = sprintf(
-            '%s, [\Laminas\ZendFrameworkBridge\ConfigPostProcessor::class]',
-            $matches['prelude']
-        );
-        $newContents = str_replace($search, $replacement, $contents);
-
-        file_put_contents($configFile, $newContents);
+        $bridgeConfigPostProcessor = new BridgeConfigPostProcessor();
+        $bridgeConfigPostProcessor->inject($path, $disableConfigProcessorInjection, $io);
     }
 }
