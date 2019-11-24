@@ -17,7 +17,7 @@ Laminas, Expressive, and/or Apigility.
 Install the library globally using [Composer](https://getcomposer.org):
 
 ```bash
-$ composer require --global laminas/laminas-migration
+$ composer global require laminas/laminas-migration
 ```
 
 ### Via cloning
