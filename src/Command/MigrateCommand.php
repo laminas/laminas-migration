@@ -32,8 +32,8 @@ use const DIRECTORY_SEPARATOR;
 class MigrateCommand extends Command
 {
     const HELP = <<< EOH
-Migrate a project or library to target Laminas, Expressive, and/or Apigility
-packages.
+Migrate a project or library to target Laminas, Mezzio, and/or Laminas API
+Tools packages.
 
 <info>Basic Usage</info>
 <info>-----------</info>
@@ -80,13 +80,13 @@ The tooling provides three potential new injections into your code base:
   dependency. This plugin intercepts requests to install Zend Framework
   packages, and substitutes the Laminas equivalents.
 
-- Injecting the `Laminas\ZendFrameworkBridge` module into MVC and Apigility
+- Injecting the `Laminas\ZendFrameworkBridge` module into MVC and API
   applications. This module provides configuration post processing to replace,
   at runtime, references to known Zend Framework configuration keys and
   dependencies with the Laminas equivalents.
 
 - Injecting the `Laminas\ZendFrameworkBridge\ConfigPostProcessor` class as a
-  `Laminas\ConfigAggregator\ConfigAggregator` post processor into Expressive
+  `Laminas\ConfigAggregator\ConfigAggregator` post processor into Mezzio
   applications. This class provides configuration post processing to replace,
   at runtime, references to known Zend Framework configuration keys and
   dependencies with the Laminas equivalents.
@@ -103,7 +103,7 @@ EOH;
     protected function configure()
     {
         $this->setName('migrate')
-            ->setDescription('Migrate a project or third-party library to target Laminas/Expressive/Apigility')
+            ->setDescription('Migrate a project or third-party library to target Laminas, API Tools, or Mezzio')
             ->setHelp(self::HELP)
             ->addArgument(
                 'path',
