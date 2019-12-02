@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.1.12 - TBD
+## 0.2.0 - TBD
 
 ### Added
 
@@ -10,7 +10,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#15](https://github.com/laminas/laminas-migration/pull/15) updates the dependency on laminas-zendframework-bridge to pin to the 0.4 series.
+
+- [#15](https://github.com/laminas/laminas-migration/pull/15) updates the tooling to refer to Mezzio instead of Expressive, and Laminas API Tools instead of Apigility.
 
 ### Deprecated
 
