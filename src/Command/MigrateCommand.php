@@ -13,7 +13,6 @@ use Laminas\Migration\BridgeModule;
 use Laminas\Migration\ComposerLockFile;
 use Laminas\Migration\DependencyPlugin;
 use Laminas\Migration\FileFilter;
-use Laminas\Migration\Helper;
 use Laminas\Migration\MigrateProject;
 use Laminas\Migration\VendorDirectory;
 use RecursiveCallbackFilterIterator;

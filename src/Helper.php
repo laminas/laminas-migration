@@ -20,7 +20,9 @@ class Helper
     {
         static $replacements;
 
-        $replacements = $replacements ?: new Replacements();
+        $replacements = $replacements ?: new Replacements([
+            'Expressive\\' => 'Mezzio\\',
+        ]);
         return $replacements->replace($string);
     }
 
