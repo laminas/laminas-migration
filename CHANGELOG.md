@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.2.1 - TBD
+## 0.2.1 - 2019-12-09
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#17](https://github.com/laminas/laminas-migration/pull/17) adds logic to replace references to `Expressive\\` with `Mezzio\\`; this fixes issues that arise when users import the `Zend\Expressive` namespace, and then reference classes from the subnamespace in their code.
 
 ## 0.2.0 - 2019-12-02
 
