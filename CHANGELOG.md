@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.2.2 - TBD
+## 0.2.2 - 2019-12-17
 
 ### Added
 
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- Updates the minimum supported version of laminas-zendframework-bridge to 0.4.3, to pick up a number of fixes for edge cases found when unit testing packages and integration testing the skeletons.
 
 ### Deprecated
 
