@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#19](https://github.com/laminas/laminas-migration/pull/19) bumps the minimum supported version of laminas-zendframework-bridge to 0.4.4.
 
 ### Deprecated
 
