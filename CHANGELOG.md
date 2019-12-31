@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.2.4 - TBD
+## 1.0.0 - 2019-12-31
 
 ### Added
 
-- Nothing.
+- First stable release.
 
 ### Changed
 

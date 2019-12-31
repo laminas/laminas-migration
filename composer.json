@@ -8,7 +8,7 @@
     "require": {
         "php": "^5.6 || ^7.0",
         "ext-json": "*",
-        "laminas/laminas-zendframework-bridge": "^0.4.4 || ^1.0",
+        "laminas/laminas-zendframework-bridge": "^1.0",
         "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0"
     },
     "require-dev": {
@@ -24,6 +24,12 @@
     "autoload-dev": {
         "psr-4": {
             "LaminasTest\\Migration\\": "test/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev",
+            "dev-develop": "1.1.x-dev"
         }
     },
     "bin": [
