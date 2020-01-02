@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 1.0.1 - TBD
+## 1.0.1 - 2020-01-02
 
 ### Added
 
@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#22](https://github.com/laminas/laminas-migration/pull/22) bumps the laminas-dependency-plugin constraint used during injection to `^1.0`.
 
 ## 1.0.0 - 2019-12-31
 
