@@ -1,12 +1,5 @@
 # laminas-migration
 
-> ## TESTING PURPOSES ONLY
->
-> This package is currently in testing phases. While it can be used to migrate
-> your application to Laminas packages, **those packages do not yet exist in a
-> stable form**. Only use this to help provide feedback on edge cases to the
-> Zend Framework and Laminas teams.
-
 Migrate a Zend Framework project or third-party library to target
 Laminas, Expressive, and/or Apigility.
 
