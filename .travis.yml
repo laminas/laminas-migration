@@ -26,11 +26,9 @@ matrix:
       env:
         - COMPAT_VERSION=7.3
         - RUN_TESTS=1
-    - php: 7.4snapshot
+    - php: 7.4
       env:
         - COMPAT_VERSION=7.4
-  allow_failures:
-    - php: 7.4snapshot
 
 install:
   - composer update $COMPOSER_ARGS
