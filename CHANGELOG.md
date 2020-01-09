@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.0.2 - TBD
+## 1.0.2 - 2020-01-09
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#30](https://github.com/laminas/laminas-migration/pull/30) adds version information to the tool, to simplify identifying the version when reporting issues.
 
 ## 1.0.1 - 2020-01-02
 
