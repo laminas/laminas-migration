@@ -9,6 +9,7 @@
 
 namespace Laminas\Migration;
 
+use PackageVersions\Versions;
 use Symfony\Component\Console\Application;
 
 if (file_exists($a = __DIR__ . '/../../../autoload.php')) {
@@ -22,7 +23,9 @@ if (file_exists($a = __DIR__ . '/../../../autoload.php')) {
     exit(1);
 }
 
-$application = new Application('laminas-migration');
+$version = strstr(Versions::getVersion('laminas/laminas-migration'), '@', true);
+
+$application = new Application('laminas-migration', $version);
 $application->addCommands([
     new Command\MigrateCommand(),
     new Command\NestedDepsCommand(),

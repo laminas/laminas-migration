@@ -9,6 +9,7 @@
         "php": "^5.6 || ^7.0",
         "ext-json": "*",
         "laminas/laminas-zendframework-bridge": "^1.0",
+        "ocramius/package-versions": "^1.4",
         "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0"
     },
     "require-dev": {
