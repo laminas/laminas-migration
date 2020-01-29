@@ -56,7 +56,7 @@ class ComposerLockFile
         $lockedDevPackages = $composerLockData['packages-dev'];
         $devPackageVersions = array_combine(array_column($lockedDevPackages, 'name'), array_column($lockedDevPackages, 'version'));
 
-        $composerJsonData = json_decode(file_get_contents($composerJson));
+        $composerJsonData = json_decode(file_get_contents($composerJson), true);
 
         foreach ($packageVersions as $package => $version) {
             $composerJsonData['require'][$package] = $version;
