@@ -97,7 +97,7 @@ If you wish to prevent injection of either the laminas-zendframework-bridge
 Module or ConfigPostProcessor into your application, use the
 --no-config-processor option.
 
-If you want to keep your currently locked package versions, use the flag --keep-package-versions option.
+If you want to keep your currently locked package versions, use the flag --keep-locked-versions option.
 NOTE: By using a diff-tool, you can easily restore the old version constraints after you executed `composer install`.
 To update your lockfile, you can just use `composer update --lock` 
 
