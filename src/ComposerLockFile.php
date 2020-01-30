@@ -10,8 +10,6 @@ namespace Laminas\Migration;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-use function array_column;
-use function array_combine;
 use function file_exists;
 use function file_get_contents;
 use function json_decode;
@@ -50,20 +48,23 @@ class ComposerLockFile
         $io->writeln('<info>Moving locked package versions to composer.json</info>');
 
         $composerLockData = json_decode(file_get_contents($composerLock), true);
-        $lockedPackages = $composerLockData['packages'];
-        $packageVersions = array_combine(array_column($lockedPackages, 'name'), array_column($lockedPackages, 'version'));
-
-        $lockedDevPackages = $composerLockData['packages-dev'];
-        $devPackageVersions = array_combine(array_column($lockedDevPackages, 'name'), array_column($lockedDevPackages, 'version'));
-
         $composerJsonData = json_decode(file_get_contents($composerJson), true);
 
-        foreach ($packageVersions as $package => $version) {
-            $composerJsonData['require'][$package] = $version;
+        $mapper = static function (array $package) {
+            return [
+                $package['name'],
+                $package['version'],
+            ];
+        };
+
+        foreach ($composerLockData['packages'] as $package) {
+            list($packageName, $version) = $mapper($package);
+            $composerJsonData['require'][$packageName] = $version;
         }
 
-        foreach ($devPackageVersions as $package => $version) {
-            $composerJsonData['require-dev'][$package] = $version;
+        foreach ($composerLockData['packages-dev'] as $package) {
+            list($packageName, $version) = $mapper($package);
+            $composerJsonData['require-dev'][$packageName] = $version;
         }
 
         Helper::writeJson($composerJson, $composerJsonData);
