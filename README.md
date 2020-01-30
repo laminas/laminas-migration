@@ -89,3 +89,5 @@ where:
 
 This will be a one-off operation. If you add dependencies later, or perform a
 `composer update`, you may need to re-run it.
+
+- `--keep-locked-versions` will synchronize your `composer.json` with the `composer.lock` packages before the migration starts. This will ensure that your projects stays on the same versions even after deleting the lock-file. Thus, after running `composer install` (after the migration finished, you can manually re-configure your `composer.json` again by using a diff-tool)
