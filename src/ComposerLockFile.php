@@ -10,8 +10,10 @@ namespace Laminas\Migration;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function explode;
 use function file_exists;
 use function file_get_contents;
+use function in_array;
 use function json_decode;
 use function unlink;
 
@@ -51,9 +53,19 @@ class ComposerLockFile
         $composerJsonData = json_decode(file_get_contents($composerJson), true);
 
         $mapper = static function (array $package) {
+            $name = $package['name'];
+            $version = $package['version'];
+            $vendor = explode('/', $name, 2)[0];
+
+            // There are some packages from zendframework/zfcampus which received patches after migration
+            // For example: https://github.com/laminas/laminas-diactoros/compare/2.2.1...2.2.1p1
+            if (in_array($vendor, ['zfcampus', 'zendframework'], true)) {
+                $version = sprintf('~%s.0', $version);
+            }
+
             return [
-                $package['name'],
-                $package['version'],
+                $name,
+                $version,
             ];
         };
 
