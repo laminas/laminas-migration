@@ -64,7 +64,7 @@ class PackageVersionsTest extends TestCase
             ],
             'empty-list' => [
                 [],
-                '1.0.2'
+                'UNKNOWN'
             ],
         ];
     }

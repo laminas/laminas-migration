@@ -12,6 +12,7 @@ use function array_filter;
 use function array_map;
 use function array_merge;
 use function array_reduce;
+use function array_shift;
 use function assert;
 use function file_get_contents;
 use function is_array;
@@ -49,30 +50,32 @@ final class PackageVersions
      */
     public static function fromComposerFiles(array $composerFiles)
     {
-        return new self(
-            array_merge(
-                ...array_map(
-                    static function ($filename) {
-                        $data = json_decode(file_get_contents($filename), false);
+        $allPackageLists = array_map(
+            static function ($filename) {
+                $data = json_decode(file_get_contents($filename), false);
 
-                        if (is_array($data)) {
-                            return self::buildMapFromPackageList($data);
-                        }
+                if (is_array($data)) {
+                    return self::buildMapFromPackageList($data);
+                }
 
-                        assert(is_object($data) && isset($data->packages) && is_array($data->packages));
-                        assert(! isset($data->{'packages-dev'}) || is_array($data->{'packages-dev'}));
+                assert(is_object($data) && isset($data->packages) && is_array($data->packages));
+                assert(! isset($data->{'packages-dev'}) || is_array($data->{'packages-dev'}));
 
-                        return self::buildMapFromPackageList(
-                            $data->packages + (isset($data->{'packages-dev'}) ? $data->{'packages-dev'} : [])
-                        );
-                    },
-                    array_filter(
-                        $composerFiles,
-                        'is_readable'
-                    )
-                )
+                return self::buildMapFromPackageList(
+                    $data->packages + (isset($data->{'packages-dev'}) ? $data->{'packages-dev'} : [])
+                );
+            },
+            array_filter(
+                $composerFiles,
+                'is_readable'
             )
         );
+
+        if (count($allPackageLists) <= 1) {
+            return new self($allPackageLists ? array_shift($allPackageLists) : []);
+        }
+
+        return new self(array_merge(...$allPackageLists));
     }
 
     /**
