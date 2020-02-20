@@ -11,7 +11,7 @@ class PackageVersionsTest extends TestCase
 {
     public function testShouldProvideVersionForKnownPackages(): void
     {
-        self::assertSame(
+        $this->assertSame(
             '1.0.0',
             (new PackageVersions(['foo/bar' => '1.0.0']))->getPackageVersion('foo/bar')
         );
@@ -19,7 +19,7 @@ class PackageVersionsTest extends TestCase
 
     public function testShouldProvideUnknownForUnknownPackages(): void
     {
-        self::assertSame(
+        $this->assertSame(
             'UNKNOWN',
             (new PackageVersions([]))->getPackageVersion('foo/bar')
         );
@@ -77,7 +77,7 @@ class PackageVersionsTest extends TestCase
     {
         $versions = PackageVersions::fromComposerFiles($composerFiles);
 
-        self::assertSame(
+        $this->assertSame(
             $expectedVersion,
             $versions->getPackageVersion(PackageVersions::APP_PACKAGE_NAME)
         );
@@ -90,7 +90,7 @@ class PackageVersionsTest extends TestCase
 
         $version = PackageVersions::getAppVersion();
 
-        self::assertIsString($version); // Lack of proper return types due to php 5.6 compatibility
-        self::assertNotEmpty($version);
+        $this->assertIsString($version); // Lack of proper return types due to php 5.6 compatibility
+        $this->assertNotEmpty($version);
     }
 }
