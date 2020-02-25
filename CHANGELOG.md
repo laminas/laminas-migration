@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.0.3 - TBD
+## 1.0.3 - 2020-02-25
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#37](https://github.com/laminas/laminas-migration/pull/37) restores support for PHP 5.6 by implementing an alternative strategy for determining the package version.
 
 ## 1.0.2 - 2020-01-09
 
