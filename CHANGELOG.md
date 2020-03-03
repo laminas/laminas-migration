@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.1.0 - TBD
+
+### Added
+
+- [#34](https://github.com/laminas/laminas-migration/pull/34) adds `--keep-locked-versions` flag to synchronise `composer.json` with `composer.lock` packages before migration.
+  For more details please see [documentation](https://docs.laminas.dev/migration/#migrating-the-conservative-way).
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 1.0.3 - 2020-02-25
 
 ### Added
