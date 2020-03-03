@@ -97,6 +97,10 @@ If you wish to prevent injection of either the laminas-zendframework-bridge
 Module or ConfigPostProcessor into your application, use the
 --no-config-processor option.
 
+If you want to keep your currently locked package versions, use the flag --keep-locked-versions option.
+NOTE: By using a diff-tool, you can easily restore the old version constraints after you executed `composer install`.
+To update your lockfile, you can just use `composer update --lock` 
+
 EOH;
 
     protected function configure()
@@ -136,6 +140,12 @@ EOH;
                 null,
                 InputOption::VALUE_NONE,
                 'Do not install laminas/laminas-dependency-plugin'
+            )
+            ->addOption(
+                'keep-locked-versions',
+                null,
+                InputOption::VALUE_NONE,
+                'Parse existing composer.lock (if available) and pass locked versions to composer.json'
             );
     }
 
@@ -154,6 +164,10 @@ EOH;
         }
 
         $path = realpath($path);
+
+        if ($input->getOption('keep-locked-versions')) {
+            $this->synchronizeComposerJsonWithComposerLock($path, $io);
+        }
 
         $this->removeComposerLock($path, $io);
         $this->removeVendorDirectory($path, $io);
@@ -260,5 +274,14 @@ EOH;
     {
         $bridgeConfigPostProcessor = new BridgeConfigPostProcessor();
         $bridgeConfigPostProcessor->inject($path, $disableConfigProcessorInjection, $io);
+    }
+
+    /**
+     * @param string $path
+     */
+    private function synchronizeComposerJsonWithComposerLock($path, SymfonyStyle $io)
+    {
+        $lockFile = new ComposerLockFile();
+        $lockFile->moveLockedVersionsToComposerJson($path, $io);
     }
 }
