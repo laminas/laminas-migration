@@ -48,7 +48,7 @@ $ alias laminas-migration=/path/to/laminas-migration/bin/laminas-migration
 To migrate a library or project to Laminas, use the `migrate` command:
 
 ```bash
-$ laminas-migration migrate [--no-plugin] [--exclude=|-e=] [path]
+$ laminas-migration migrate [--no-plugin] [--exclude=|-e=] [--keep-locked-versions] [path]
 ```
 
 where:
@@ -66,6 +66,8 @@ where:
 - `[--exclude=|-e=]` can be used multiple times to specify _directories_ to omit
   from the migration. Examples might include your `data/` or `cache/`
   directories.
+  
+- `[--keep-locked-versions]` will synchronize your `composer.json` with the `composer.lock` packages before the migration starts. This will ensure that your projects stays on the same versions even after deleting the lock-file. Thus, after running `composer install` (after the migration finished, you can manually re-configure your `composer.json` again by using a diff-tool) and updating the `composer.lock` by just using `composer update --lock`. This wont trigger any update but refreshes the `composer.lock` to be back in sync with the `composer.json` again. **Please note that we encourage to upgrade to the latest versions to avoid unexpected issues. If you experiencing issues after migration while using this flag we cannot offer support.**
 
 When done, you can check to see what files were changed, and examine the
 `composer.json`. Run `composer install` to install dependencies, and then test
@@ -88,6 +90,4 @@ where:
 - `--composer` allows you to provide a custom path to the `composer` binary.
 
 This will be a one-off operation. If you add dependencies later, or perform a
-`composer update`, you may need to re-run it.
-
-- `--keep-locked-versions` will synchronize your `composer.json` with the `composer.lock` packages before the migration starts. This will ensure that your projects stays on the same versions even after deleting the lock-file. Thus, after running `composer install` (after the migration finished, you can manually re-configure your `composer.json` again by using a diff-tool) and updating the `composer.lock` by just using `composer update --lock`. This wont trigger any update but refreshes the `composer.lock` to be back in sync with the `composer.json` again. **Please note that we encourage to upgrade to the latest versions to avoid unexpected issues. If you experiencing issues after migration while using this flag we cannot offer support.** 
+`composer update`, you may need to re-run it. 
