@@ -327,7 +327,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- [#9](https://github.com/laminas/laminas-migration/pull/9) updates the tool to inject the lamians-zendframework-bridge configuration post processor in Expressive applications, and as a module in MVC applications.
+- [#9](https://github.com/laminas/laminas-migration/pull/9) updates the tool to inject the laminas-zendframework-bridge configuration post processor in Expressive applications, and as a module in MVC applications.
 
 - [#9](https://github.com/laminas/laminas-migration/pull/9) updates the tool to require laminas-zendframework-bridge, for purposes of supplying replacements.
 
