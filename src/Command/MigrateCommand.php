@@ -14,19 +14,14 @@ use Laminas\Migration\ComposerLockFile;
 use Laminas\Migration\DependencyPlugin;
 use Laminas\Migration\FileFilter;
 use Laminas\Migration\MigrateProject;
+use Laminas\Migration\SpecialCase\ComposerJsonZendFrameworkPackageSpecialCase;
 use Laminas\Migration\VendorDirectory;
-use RecursiveCallbackFilterIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-
-use const DIRECTORY_SEPARATOR;
 
 class MigrateCommand extends Command
 {
@@ -239,7 +234,9 @@ EOH;
      */
     private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io)
     {
-        $migration = new MigrateProject();
+        $migration = new MigrateProject([
+            new ComposerJsonZendFrameworkPackageSpecialCase(),
+        ]);
         $migration($path, $filter, $io);
     }
 

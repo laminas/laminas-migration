@@ -1,0 +1,5 @@
+{
+    "require": {
+        "zendframework/zendframework": "~2.4.13"
+    }
+}
