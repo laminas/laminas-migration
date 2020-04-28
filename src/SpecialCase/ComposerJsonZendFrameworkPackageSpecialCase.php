@@ -15,32 +15,30 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
 {
     public function matches($filename, $content)
     {
-        return (bool) preg_match('#\bcomposer\.json$#', $filename)
-            && null !== strpos($content, '"zendframework/zendframework": "');
+        if (! preg_match('#\bcomposer\.json$#', $filename)) {
+            return false;
+        }
+
+        $composer = json_decode($content, true);
+        return isset($composer['require']['zendframework/zendframework'])
+            || isset($composer['require-dev']['zendframework/zendframework']);
     }
 
     public function replace($content)
     {
-        $matches = [];
-        preg_match(
-            '#^(?P<line>(?P<indent>\s+)"zendframework/zendframework":\s*"(?P<constraint>[^"]+)"\s*(?P<eol>,\s*|$))#m',
-            $content,
-            $matches
-        );
+        $composer = json_decode($content, true);
 
-        $line       = $matches['line'];
-        $indent     = $matches['indent'];
-        $constraint = $matches['constraint'];
-        $eol        = $matches['eol'];
-        $packages   = [];
+        $isProduction = isset($composer['require']['zendframework/zendframework']);
 
-        foreach ($this->getPackageList($constraint) as $package => $packageConstraint) {
-            $packages[] = sprintf('%s"%s": "%s"', $indent, $package, $packageConstraint);
-        }
+        $constraint = $isProduction
+            ? $composer['require']['zendframework/zendframework']
+            : $composer['require-dev']['zendframework/zendframework'];
 
-        $replacement = sprintf('%s%s', implode(",\n", $packages), $eol);
+        $packages = $this->getPackageList($constraint);
 
-        return str_replace($line, $replacement, $content);
+        $composer = $this->updateComposer($composer, $packages, $isProduction ? 'require' : 'require-dev');
+
+        return json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     /**
@@ -52,7 +50,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
     {
         $semver   = new Semver();
         $versions = array_keys(self::ZF_VERSIONS);
-        usort($versions, function ($a, $b) {
+        usort($versions, static function ($a, $b) {
             // Reverse sort by version
             $result = version_compare($a, $b);
             if ($result === 0) {
@@ -90,6 +88,36 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
             }
         }
         return $packageList;
+    }
+
+    /**
+     * @param string $section Either "require" or "require-dev"
+     * @return array The updated Composer array.
+     */
+    private function updateComposer(array $composer, array $packages, $section)
+    {
+        unset($composer[$section]['zendframework/zendframework']);
+        $composer[$section] = array_merge($composer[$section], $packages);
+
+        // Sort the section.
+        // Items not in vendor/package format bubble up.
+        uksort($composer[$section], static function ($a, $b) {
+            if (strpos($a, '/') === false && strpos($b, '/') === false) {
+                return strcasecmp($a, $b);
+            }
+
+            if (strpos($a, '/') === false && strpos($b, '/') !== false) {
+                return -1;
+            }
+
+            if (strpos($a, '/') !== false && strpos($b, '/') === false) {
+                return 1;
+            }
+
+            return strcasecmp($a, $b);
+        });
+
+        return $composer;
     }
 
     const ZF_VERSIONS = [
