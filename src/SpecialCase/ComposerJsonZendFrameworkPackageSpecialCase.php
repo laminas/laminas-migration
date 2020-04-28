@@ -411,7 +411,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-version'          => '~2.5.0',
         'zendframework/zend-view'             => '~2.5.0',
         'zendframework/zend-xmlrpc'           => '~2.5.0',
-        'zendframework/zendxml'               => '~1.0'
+        'zendframework/zendxml'               => '~1.0',
     ];
 
     const ZF_2_5_1 = [
@@ -465,7 +465,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-version'          => '~2.5.0',
         'zendframework/zend-view'             => '~2.5.0',
         'zendframework/zend-xmlrpc'           => '~2.5.0',
-        'zendframework/zendxml'               => '~1.0'
+        'zendframework/zendxml'               => '~1.0',
     ];
 
     const ZF_2_5_2 = [
@@ -519,7 +519,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-version'          => '~2.5.0',
         'zendframework/zend-view'             => '~2.5.0',
         'zendframework/zend-xmlrpc'           => '~2.5.0',
-        'zendframework/zendxml'               => '^1.0.1'
+        'zendframework/zendxml'               => '^1.0.1',
     ];
 
     const ZF_2_5_3 = [
@@ -573,7 +573,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-version'          => '^2.5',
         'zendframework/zend-view'             => '^2.5',
         'zendframework/zend-xmlrpc'           => '^2.5',
-        'zendframework/zendxml'               => '^1.0.1'
+        'zendframework/zendxml'               => '^1.0.1',
     ];
 
     const ZF_3_0_0 = [
@@ -637,6 +637,6 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-view'              => '^2.8',
         'zendframework/zend-xml2json'          => '^3.0',
         'zendframework/zend-xmlrpc'            => '^2.6',
-        'zendframework/zendxml'                => '^1.0.2'
+        'zendframework/zendxml'                => '^1.0.2',
     ];
 }
