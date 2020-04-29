@@ -2,33 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.0 - TBD
+## 1.2.0 - 2020-04-29
 
 ### Added
 
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
-
-## 1.1.1 - TBD
-
-### Added
-
-- Nothing.
+- [#42](https://github.com/laminas/laminas-migration/pull/42) adds logic for migrating the "zendframework/zendframework" package to Laminas. Previously, it was left unmigrated. Now, the entry is replaced by a set of packages relevant to the given constraint listed. We recommend users who benefit from this change audit their code post-migration to remove any unused packages installed in this way.
 
 ### Changed
 
