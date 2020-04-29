@@ -19,26 +19,48 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
             return false;
         }
 
-        $composer = json_decode($content, true);
+        $composer = $this->normalizePackageNames(json_decode($content, true));
         return isset($composer['require']['zendframework/zendframework'])
             || isset($composer['require-dev']['zendframework/zendframework']);
     }
 
     public function replace($content)
     {
-        $composer = json_decode($content, true);
+        $composer = $this->normalizePackageNames(json_decode($content, true));
 
         $isProduction = isset($composer['require']['zendframework/zendframework']);
 
-        $constraint = $isProduction
-            ? $composer['require']['zendframework/zendframework']
-            : $composer['require-dev']['zendframework/zendframework'];
+        $section = isset($composer['require']['zendframework/zendframework'])
+            ? 'require'
+            : 'require-dev';
 
-        $packages = $this->getPackageList($constraint);
-
-        $composer = $this->updateComposer($composer, $packages, $isProduction ? 'require' : 'require-dev');
+        $packages = $this->getPackageList($composer[$section]['zendframework/zendframework']);
+        $composer = $this->updateComposer($composer, $packages, $section);
 
         return json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * @return array
+     */
+    private function normalizePackageNames(array $composer)
+    {
+        foreach (['require', 'require-dev'] as $section) {
+            if (! isset($composer[$section])) {
+                continue;
+            }
+
+            foreach ($composer[$section] as $package => $constraint) {
+                $normalized = strtolower($package);
+                if ($normalized === $package) {
+                    continue;
+                }
+
+                unset($composer[$section][$package]);
+                $composer[$section][$normalized] = $constraint;
+            }
+        }
+        return $composer;
     }
 
     /**
