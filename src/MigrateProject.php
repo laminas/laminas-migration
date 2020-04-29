@@ -26,9 +26,16 @@ class MigrateProject
     /** @var Directory */
     private $dir;
 
-    public function __construct()
+    /** @var SpecialCase\SpecialCaseInterface[] */
+    private $specialCases;
+
+    /**
+     * @param SpecialCase\SpecialCaseInterface[] $specialCases
+     */
+    public function __construct(array $specialCases = [])
     {
         $this->dir = new Directory();
+        $this->specialCases = $specialCases;
     }
 
     public function __invoke($path, callable $filter, SymfonyStyle $io)
@@ -65,7 +72,7 @@ class MigrateProject
     public function performReplacements($file, $projectPath)
     {
         $content  = file_get_contents($file);
-        $replaced = Helper::replace($content);
+        $replaced = Helper::replace($this->applySpecialCases($file, $content));
 
         if ($replaced !== $content) {
             file_put_contents($file, $replaced);
@@ -78,5 +85,20 @@ class MigrateProject
             $this->dir->createParentDirectory($newName);
             rename($file, $newName);
         }
+    }
+
+    /**
+     * @param string $file
+     * @param string $contents
+     * @return string
+     */
+    private function applySpecialCases($file, $contents)
+    {
+        foreach ($this->specialCases as $specialCase) {
+            if ($specialCase->matches($file, $contents)) {
+                $contents = $specialCase->replace($contents);
+            }
+        }
+        return $contents;
     }
 }
