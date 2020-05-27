@@ -25,18 +25,26 @@ matrix:
     - php: 7.3
       env:
         - COMPAT_VERSION=7.3
-        - RUN_TESTS=1
+        - RUN_TESTS="phpunit/phpunit:^8.5 composer/semver:^1.0"
+    - php: 7.3
+      env:
+        - COMPAT_VERSION=7.3
+        - RUN_TESTS="phpunit/phpunit:^8.5 composer/semver:^2.0"
+    - php: 7.3
+      env:
+        - COMPAT_VERSION=7.3
+        - RUN_TESTS="phpunit/phpunit:^8.5 composer/semver:^3.0"
     - php: 7.4
       env:
         - COMPAT_VERSION=7.4
 
 install:
   - composer update $COMPOSER_ARGS
-  - if [[ $RUN_TESTS == '1' ]]; then composer require --dev "phpunit/phpunit:^8.5" ; fi
+  - if [[ $RUN_TESTS != '' ]]; then composer require $RUN_TESTS ; fi
   - stty cols 120 && composer show
 
 script:
-  - if [[ $RUN_TESTS == '1' ]]; then composer test ; fi
+  - if [[ $RUN_TESTS != '' ]]; then composer test ; fi
   - composer cs-check -- -p src --standard=PHPCompatibility --runtime-set testVersion $COMPAT_VERSION
 
 notifications:
