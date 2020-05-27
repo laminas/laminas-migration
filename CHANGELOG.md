@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 1.2.1 - TBD
+## 1.2.1 - 2020-05-27
 
 ### Added
 
@@ -32,7 +32,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#44](https://github.com/laminas/laminas-migration/pull/44) updates the composer/semver requirement to allow usage with any of the v1, v2, or v3 release trees.
 
 ### Deprecated
 
