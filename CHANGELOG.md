@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.2 - TBD
+## 1.2.2 - 2020-06-23
 
 ### Added
 
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#49](https://github.com/laminas/laminas-migration/pull/49) adds the option "--yes|-y" to the migrate command; if not provided, and the console is interactive, the command will warn the user that the command removes the `composer.lock` file and `vendor/` directory, asking them to confirm they want to continue. If they do not, or if they do not pass --yes on the command line in a non-interactive session, the command will abort.
 
 ### Deprecated
 
