@@ -32,7 +32,7 @@ class Helper
      */
     public static function writeJson($file, array $data)
     {
-        $content = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
+        $content = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 
         return file_put_contents($file, $content);
     }
