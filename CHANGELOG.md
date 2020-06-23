@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#48](https://github.com/laminas/laminas-migration/pull/48) updates how the `composer.json` file is written to ensure it does not escape unicode characters.
 
 ## 1.2.1 - 2020-05-27
 
