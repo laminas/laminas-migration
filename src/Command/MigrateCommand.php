@@ -17,10 +17,12 @@ use Laminas\Migration\MigrateProject;
 use Laminas\Migration\SpecialCase\ComposerJsonZendFrameworkPackageSpecialCase;
 use Laminas\Migration\VendorDirectory;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateCommand extends Command
@@ -141,6 +143,12 @@ EOH;
                 null,
                 InputOption::VALUE_NONE,
                 'Parse existing composer.lock (if available) and pass locked versions to composer.json'
+            )
+            ->addOption(
+                'yes',
+                'y',
+                InputOption::VALUE_NONE,
+                'Indicate that you acknowledge that the tooling will remove your composer.lock and vendor directory'
             );
     }
 
@@ -149,7 +157,11 @@ EOH;
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
+        if (! $this->approveVendorDeletion($input, $output)) {
+            return 1;
+        }
+
+        $io   = new SymfonyStyle($input, $output);
         $path = $input->getArgument('path');
 
         $io->title(sprintf('Migrating project at path "%s" to Laminas', $path));
@@ -280,5 +292,31 @@ EOH;
     {
         $lockFile = new ComposerLockFile();
         $lockFile->moveLockedVersionsToComposerJson($path, $io);
+    }
+
+    /**
+     * @return bool
+     */
+    private function approveVendorDeletion(InputInterface $input, OutputInterface $output)
+    {
+        if ($input->getOption('yes')) {
+            return true;
+        }
+
+        if (! $input->isInteractive()) {
+            $output->writeln(
+                '<error>You must pass the --yes flag indicating you acknowledge this command'
+                . ' will remove your composer.lock file and vendor directory</error>'
+            );
+            return false;
+        }
+
+        $question = new ConfirmationQuestion(
+            '<question>This command REMOVES your composer.lock file and vendor directory;'
+            . ' do you wish to continue?</question>'
+        );
+        /** @var QuestionHelper $helper */
+        $helper = $this->getHelper('question');
+        return $helper->ask($input, $output, $question);
     }
 }
