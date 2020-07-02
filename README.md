@@ -3,6 +3,12 @@
 Migrate a Zend Framework project or third-party library to target
 Laminas, Expressive, and/or Apigility.
 
+This tool will migrate:
+
+- Zend Framework MVC projects, all v2 and v3 releases.
+- Apigility projects, all versions
+- Expressive versions, all versions
+
 ## Installation
 
 ### Via Composer
