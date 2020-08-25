@@ -9,6 +9,8 @@ This tool will migrate:
 - Apigility projects, all versions
 - Expressive versions, all versions
 
+For more details, please read the [documentation](https://docs.laminas.dev/migration/) and [FAQ](https://docs.laminas.dev/migration/faq/).
+
 ## Installation
 
 ### Via Composer
