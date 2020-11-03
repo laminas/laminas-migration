@@ -34,7 +34,7 @@
         "bin/laminas-migration"
     ],
     "scripts": {
-        "check-compat": "for VERSION in 5.6 7.0 7.1 7.2 7.3 7.4;do ./vendor/bin/phpcs -- -p src --standard=PHPCompatibility --runtime-set testVersion $VERSION ; done",
+        "check-compat": "for VERSION in 7.3 7.4 8.0;do ./vendor/bin/phpcs -- -p src --standard=PHPCompatibility --runtime-set testVersion $VERSION ; done",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit"
