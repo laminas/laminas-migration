@@ -13,7 +13,7 @@
         "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "phpcompatibility/php-compatibility": "^9.3",
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "9.3"
