@@ -16,7 +16,9 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpunit/phpunit": "9.3",
-        "roave/security-advisories": "dev-master"
+        "psalm/plugin-phpunit": "^0.15.0",
+        "roave/security-advisories": "dev-master",
+        "vimeo/psalm": "^4.3"
     },
     "autoload": {
         "psr-4": {
@@ -37,6 +39,7 @@
         "check-compat": "for VERSION in 7.3 7.4 8.0;do ./vendor/bin/phpcs -- -p src --standard=PHPCompatibility --runtime-set testVersion $VERSION ; done",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
+        "static-analysis": "psalm --shepherd --stats",
         "test": "phpunit"
     }
 }
