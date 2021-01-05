@@ -25,7 +25,7 @@ matrix:
     - php: 7.4
       env:
         - COMPAT_VERSION=7.4
-    - php: nightly
+    - php: 8.0
       env:
         - COMPAT_VERSION=8.0
         - COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
