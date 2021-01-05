@@ -74,7 +74,7 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
-            $this->assertNotRegExp(
+            $this->assertDoesNotMatchRegularExpression(
                 '!/\.(git|hg|svn)(/|$)!',
                 $file->getRealPath(),
                 'One or more files matched a VCS directory'
@@ -94,7 +94,7 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
-            $this->assertNotRegExp(
+            $this->assertDoesNotMatchRegularExpression(
                 '!/vendor(/|$)!',
                 $file->getRealPath(),
                 'One or more files matched a VCS directory'
@@ -119,7 +119,7 @@ class FileFilterTest extends TestCase
         }, $exclusions));
 
         foreach ($files as $file) {
-            $this->assertNotRegExp(
+            $this->assertDoesNotMatchRegularExpression(
                 '!/(' . $pattern . ')$!',
                 $file->getRealPath(),
                 'One or more files matched a VCS directory'
@@ -187,7 +187,7 @@ class FileFilterTest extends TestCase
         }, $exclusions));
 
         foreach ($files as $file) {
-            $this->assertNotRegExp(
+            $this->assertDoesNotMatchRegularExpression(
                 '!/(' . $exclusionPattern . ')$!',
                 $file->getRealPath(),
                 sprintf('File %s matched a VCS directory', $file->getRealPath())

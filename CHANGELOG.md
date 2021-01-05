@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#55](https://github.com/laminas/laminas-migration/pull/55) adds support for PHP 8.0.
 
 ### Changed
 
@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#55](https://github.com/laminas/laminas-migration/pull/55) removes support for PHP versions prior to 7.3; if you need to use an older PHP version, use the 1.2.2 release instead.
 
 ### Fixed
 
