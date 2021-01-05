@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- [#61](https://github.com/laminas/laminas-migration/pull/61) changes the constructor of the `FileFilter` class to remove the initial `$path` argument, as well as to remove the `$path` property, as neither were used internally. This class is primarily an internal implementation detail; however, if you were using it in your own code, you may need to update how you create instances.
+
 - [#60](https://github.com/laminas/laminas-migration/pull/60) bumps the injected laminas/laminas-dependency-plugin constraint to `2.1` to allow usage with Composer v2 releases.
 
 ### Deprecated
