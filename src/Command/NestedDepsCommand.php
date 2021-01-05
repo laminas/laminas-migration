@@ -8,6 +8,7 @@
 
 namespace Laminas\Migration\Command;
 
+use InvalidArgumentException;
 use Laminas\Migration\Helper;
 use stdClass;
 use Symfony\Component\Console\Command\Command;
@@ -18,11 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class NestedDepsCommand extends Command
 {
-    const DESCRIPTION = <<<'EOH'
+    public const DESCRIPTION = <<<'EOH'
 Update project to require Laminas-variants of nested Zend Framework package dependencies.
 EOH;
 
-    const HELP = <<<'EOH'
+    public const HELP = <<<'EOH'
 Sometimes, third-party packages will depend on Zend Framework packages.
 In such cases, Composer will go ahead and install them if replacements
 are not already required by the project.
@@ -63,7 +64,10 @@ EOH;
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $composer = $input->getOption('composer');
+        assert(is_string($composer), new InvalidArgumentException('Invalid composer option provided'));
+
         $path = $input->getArgument('path');
+        assert(is_string($path), new InvalidArgumentException('Invalid path argument provided'));
         if ($path !== getcwd()) {
             chdir($path);
         }
@@ -113,8 +117,8 @@ EOH;
             $composer,
             array_map(
                 $createPackageSpec,
-                array_filter($packages, static function (array $package) {
-                    return ! $package['dev'];
+                array_filter($packages, static function (array $package): bool {
+                    return ! array_key_exists('dev', $package) || ! $package['dev'];
                 })
             ),
             $forDev = false
@@ -126,8 +130,8 @@ EOH;
             $composer,
             array_map(
                 $createPackageSpec,
-                array_filter($packages, static function (array $package) {
-                    return $package['dev'];
+                array_filter($packages, static function (array $package): bool {
+                    return array_key_exists('dev', $package) && $package['dev'];
                 })
             ),
             $forDev = true
@@ -177,7 +181,7 @@ EOH;
         }
 
         $root = array_shift($results);
-        if ($root && strpos($root, '(for development)') !== false) {
+        if ($root && is_string($root) && strpos($root, '(for development)') !== false) {
             return true;
         }
 
@@ -186,6 +190,7 @@ EOH;
 
     /**
      * @param string $composer
+     * @param string[] $packages
      * @param bool $forDev
      * @return bool
      */
@@ -200,7 +205,7 @@ EOH;
             '<info>Preparing to require the following packages%s:</info>',
             $forDev ? ' (for development)' : ''
         ));
-        $output->writeln(implode("\n", array_map(function ($package) {
+        $output->writeln(implode("\n", array_map(function (string $package) {
             return sprintf('- %s', trim($package, '"'));
         }, $packages)));
 

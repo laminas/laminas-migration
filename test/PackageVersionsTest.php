@@ -25,6 +25,12 @@ class PackageVersionsTest extends TestCase
         );
     }
 
+    /**
+     * @psalm-return iterable<string, array{
+     *     0: array<array-key, string>,
+     *     1: string
+     * }>
+     */
     public function provideComposerFilesTestData(): iterable
     {
         return [
@@ -90,7 +96,6 @@ class PackageVersionsTest extends TestCase
 
         $version = PackageVersions::getAppVersion();
 
-        $this->assertIsString($version); // Lack of proper return types due to php 5.6 compatibility
         $this->assertNotEmpty($version);
     }
 }

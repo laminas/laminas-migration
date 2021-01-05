@@ -8,6 +8,7 @@
 
 namespace Laminas\Migration\Command;
 
+use InvalidArgumentException;
 use Laminas\Migration\BridgeConfigPostProcessor;
 use Laminas\Migration\BridgeModule;
 use Laminas\Migration\ComposerLockFile;
@@ -28,7 +29,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateCommand extends Command
 {
-    const HELP = <<< EOH
+    public const HELP = <<< EOH
 Migrate a project or library to target Laminas, Mezzio, and/or Laminas API
 Tools packages.
 
@@ -175,6 +176,7 @@ EOH;
         }
 
         $path = realpath($path);
+        assert(is_string($path), new InvalidArgumentException('Unable to determine realpath from provided path'));
 
         if ($input->getOption('keep-locked-versions')) {
             $this->synchronizeComposerJsonWithComposerLock($path, $io);
@@ -183,7 +185,7 @@ EOH;
         $this->removeComposerLock($path, $io);
         $this->removeVendorDirectory($path, $io);
         $this->injectDependencyPlugin($path, $input->getOption('no-plugin'), $io);
-        $this->migrateProjectFiles($path, $this->createFilter($path, $input), $io);
+        $this->migrateProjectFiles($path, $this->createFilter($input), $io);
 
         $disableConfigProcessorInjection = $input->getOption('no-config-processor');
         $this->injectBridgeModule($path, $disableConfigProcessorInjection, $io);
@@ -269,13 +271,15 @@ EOH;
      * @param string $path
      * @return callable
      */
-    private function createFilter($path, InputInterface $input)
+    private function createFilter(InputInterface $input)
     {
-        return new FileFilter(
-            $path,
-            $input->getOption('filter'),
-            $input->getOption('exclude')
-        );
+        $filter = $input->getOption('filter');
+        assert(is_array($filter), new InvalidArgumentException('Invalid --filter option provided; expected array'));
+
+        $exclude = $input->getOption('exclude');
+        assert(is_array($exclude), new InvalidArgumentException('Invalid --exclude option provided; expected array'));
+
+        return new FileFilter($filter, $exclude);
     }
 
     /**

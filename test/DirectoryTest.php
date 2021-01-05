@@ -13,6 +13,12 @@ use PHPUnit\Framework\TestCase;
 
 class DirectoryTest extends TestCase
 {
+    /**
+     * @psalm-return iterable<string, array{
+     *     0: string,
+     *     1: string
+     * }>
+     */
     public function pathsToNormalize(): iterable
     {
         yield 'unix'    => ['/home/user/project', '/home/user/project'];

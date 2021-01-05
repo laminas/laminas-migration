@@ -21,7 +21,10 @@ class MigrateCommandTest extends TestCase
 {
     public function testExecutionEndsInErrorWhenNonInteractiveAndUserOmitsFlagAcknowledgingDeletion(): void
     {
-        /** @var InputInterface|MockObject $input */
+        /**
+         * @var InputInterface|MockObject $input
+         * @psalm-var InputInterface&MockObject $input
+         */
         $input = $this->createMock(InputInterface::class);
         $input
             ->expects($this->once())
@@ -33,7 +36,10 @@ class MigrateCommandTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        /** @var OutputInterface|MockObject $output */
+        /**
+         * @var OutputInterface|MockObject $output
+         * @psalm-var OutputInterface&MockObject $output
+         */
         $output = $this->createMock(OutputInterface::class);
         $output
             ->expects($this->once())
@@ -51,7 +57,10 @@ class MigrateCommandTest extends TestCase
         fwrite($tempStream, 'no');
         rewind($tempStream);
 
-        /** @var InputInterface|MockObject $input */
+        /**
+         * @var InputInterface|MockObject $input
+         * @psalm-var InputInterface&MockObject $input
+         */
         $input = $this->createMock(StreamableInputInterface::class);
         $input
             ->expects($this->once())
@@ -67,7 +76,10 @@ class MigrateCommandTest extends TestCase
             ->method('getStream')
             ->willReturn($tempStream);
 
-        /** @var OutputInterface|MockObject $output */
+        /**
+         * @var OutputInterface|MockObject $output
+         * @psalm-var OutputInterface&MockObject $output
+         */
         $output = $this->createMock(OutputInterface::class);
         $output
             ->expects($this->once())

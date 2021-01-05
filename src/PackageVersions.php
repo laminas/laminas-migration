@@ -25,9 +25,9 @@ use function json_decode;
  */
 final class PackageVersions
 {
-    const COMPOSER_INSTALLED = __DIR__ . '/../../../../composer/installed.json';
-    const COMPOSER_LOCK = __DIR__ . '/../../../../../composer.lock';
-    const APP_PACKAGE_NAME = 'laminas/laminas-migration';
+    public const COMPOSER_INSTALLED = __DIR__ . '/../../../../composer/installed.json';
+    public const COMPOSER_LOCK = __DIR__ . '/../../../../../composer.lock';
+    public const APP_PACKAGE_NAME = 'laminas/laminas-migration';
 
     /**
      * @var array<string, string>
@@ -51,7 +51,7 @@ final class PackageVersions
     public static function fromComposerFiles(array $composerFiles)
     {
         $allPackageLists = array_map(
-            static function ($filename) {
+            static function ($filename): array {
                 $data = json_decode(file_get_contents($filename), false);
 
                 if (is_array($data)) {
@@ -109,7 +109,7 @@ final class PackageVersions
     {
         return array_reduce(
             $composerPackageList,
-            static function (array $result, $package) {
+            static function (array $result, object $package) {
                 assert(isset($package->name) && is_string($package->name));
                 assert(isset($package->version) && is_string($package->version));
 

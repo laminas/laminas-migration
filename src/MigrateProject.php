@@ -38,6 +38,9 @@ class MigrateProject
         $this->specialCases = $specialCases;
     }
 
+    /**
+     * @param string $path
+     */
     public function __invoke($path, callable $filter, SymfonyStyle $io)
     {
         $io->writeln('<info>Performing migration replacements</info>');

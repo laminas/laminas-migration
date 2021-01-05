@@ -15,6 +15,7 @@ use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
+use SplFileInfo;
 
 class FileFilterTest extends TestCase
 {
@@ -55,7 +56,7 @@ class FileFilterTest extends TestCase
     }
 
     /**
-     * @param false|string $path
+     * @param string $path
      */
     public function getDirectoryIterator($path): RecursiveDirectoryIterator
     {
@@ -68,7 +69,7 @@ class FileFilterTest extends TestCase
     public function testOmitsVcsDirectoriesByDefault(): void
     {
         $path   = realpath(dirname(__DIR__));
-        $filter = new FileFilter($path, [], []);
+        $filter = new FileFilter([], []);
         $files  = new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
                 $this->getDirectoryIterator($path),
@@ -77,6 +78,7 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
+            /** @var SplFileInfo $file */
             $this->assertDoesNotMatchRegularExpression(
                 '!/\.(git|hg|svn)(/|$)!',
                 $file->getRealPath(),
@@ -88,7 +90,7 @@ class FileFilterTest extends TestCase
     public function testDoesNotReturnFilesInExcludedDirectories(): void
     {
         $path   = realpath(dirname(__DIR__));
-        $filter = new FileFilter($path, [], ['/vendor']);
+        $filter = new FileFilter([], ['/vendor']);
         $files  = new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
                 $this->getDirectoryIterator($path),
@@ -97,6 +99,7 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
+            /** @var SplFileInfo $file */
             $this->assertDoesNotMatchRegularExpression(
                 '!/vendor(/|$)!',
                 $file->getRealPath(),
@@ -109,7 +112,7 @@ class FileFilterTest extends TestCase
     {
         $exclusions = ['CHANGELOG.md', 'COPYRIGHT.md', 'LICENSE.md'];
         $path       = realpath(dirname(__DIR__));
-        $filter     = new FileFilter($path, [], $exclusions);
+        $filter     = new FileFilter([], $exclusions);
         $files      = new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
                 $this->getDirectoryIterator($path),
@@ -122,6 +125,7 @@ class FileFilterTest extends TestCase
         }, $exclusions));
 
         foreach ($files as $file) {
+            /** @var SplFileInfo $file */
             $this->assertDoesNotMatchRegularExpression(
                 '!/(' . $pattern . ')$!',
                 $file->getRealPath(),
@@ -139,7 +143,7 @@ class FileFilterTest extends TestCase
         ];
 
         $path   = realpath(dirname(__DIR__));
-        $filter = new FileFilter($path, $regexes, []);
+        $filter = new FileFilter($regexes, []);
         $files  = new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
                 $this->getDirectoryIterator($path),
@@ -148,6 +152,7 @@ class FileFilterTest extends TestCase
         );
 
         foreach ($files as $file) {
+            /** @var SplFileInfo $file */
             $matches = false;
             foreach ($regexes as $regex) {
                 $pattern = sprintf('#%s#', $regex);
@@ -177,7 +182,7 @@ class FileFilterTest extends TestCase
         ];
 
         $path   = realpath(dirname(__DIR__));
-        $filter = new FileFilter($path, $regexes, $exclusions);
+        $filter = new FileFilter($regexes, $exclusions);
         $files  = new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
                 $this->getDirectoryIterator($path),
@@ -190,6 +195,7 @@ class FileFilterTest extends TestCase
         }, $exclusions));
 
         foreach ($files as $file) {
+            /** @var SplFileInfo $file */
             $this->assertDoesNotMatchRegularExpression(
                 '!/(' . $exclusionPattern . ')$!',
                 $file->getRealPath(),

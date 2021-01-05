@@ -14,8 +14,6 @@ use function file_get_contents;
 use function json_decode;
 use function sprintf;
 
-use const DIRECTORY_SEPARATOR;
-
 class VendorDirectory extends Directory
 {
     /**
@@ -27,7 +25,7 @@ class VendorDirectory extends Directory
         $path      = $this->normalizePath($path);
         $composer  = json_decode(file_get_contents($path . '/composer.json'), true);
         return isset($composer['config']['vendor-dir'])
-            ? sprintf('%s/%s', $path, $composer['config']['vendor-dir'])
+            ? sprintf('%s/%s', $path, (string) $composer['config']['vendor-dir'])
             : sprintf('%s/vendor', $path);
     }
 

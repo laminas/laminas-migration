@@ -8,9 +8,7 @@
 
 namespace Laminas\Migration;
 
-use RecursiveIterator;
 use SplFileInfo;
-use SplTempFileObject;
 
 use function array_map;
 use function array_unshift;
@@ -35,21 +33,16 @@ class FileFilter
      */
     private $fileExclusions = [];
 
-    /** @var string */
-    private $path = [];
-
     /** @var string[] */
     private $regexes = [];
 
     /**
-     * @param string $path
      * @param string[] $regexes
      * @param string[] $exclusions
      * @return self
      */
-    public function __construct($path, array $regexes, array $exclusions)
+    public function __construct(array $regexes, array $exclusions)
     {
-        $this->path       = $path;
         $this->regexes    = $regexes;
         $this->exclusions = $exclusions;
 
