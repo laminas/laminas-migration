@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.3.0 - TBD
+## 1.3.0 - 2021-01-05
 
 ### Added
 
@@ -14,17 +14,28 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#60](https://github.com/laminas/laminas-migration/pull/60) bumps the injected laminas/laminas-dependency-plugin constraint to `2.1` to allow usage with Composer v2 releases.
 
-### Deprecated
-
-- Nothing.
-
 ### Removed
 
 - [#55](https://github.com/laminas/laminas-migration/pull/55) removes support for PHP versions prior to 7.3; if you need to use an older PHP version, use the 1.2.2 release instead.
 
-### Fixed
 
-- Nothing.
+-----
+
+### Release Notes for [1.3.0](https://github.com/laminas/laminas-migration/milestone/3)
+
+
+
+### 1.3.0
+
+- Total issues resolved: **3**
+- Total pull requests resolved: **3**
+- Total contributors: **3**
+
+#### Enhancement
+
+ - [61: Psalm integration](https://github.com/laminas/laminas-migration/pull/61) thanks to @weierophinney and @boesing
+ - [60: Update laminas-dependency-plugin constraint to 2.1](https://github.com/laminas/laminas-migration/pull/60) thanks to @weierophinney and @boesing
+ - [55: Php8 support](https://github.com/laminas/laminas-migration/pull/55) thanks to @jeger-at and @boesing
 
 ## 1.2.3 - 2021-01-05
 
