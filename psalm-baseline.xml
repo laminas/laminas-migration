@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.3.2@57b53ff26237074fdf5cbcb034f7da5172be4524">
+  <file src="src/Command/MigrateCommand.php">
+    <MixedInferredReturnType occurrences="1">
+      <code>bool</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>$helper-&gt;ask($input, $output, $question)</code>
+    </MixedReturnStatement>
+    <PossiblyInvalidArgument occurrences="6">
+      <code>$disableConfigProcessorInjection</code>
+      <code>$disableConfigProcessorInjection</code>
+      <code>$input-&gt;getOption('no-plugin')</code>
+      <code>$path</code>
+      <code>$path</code>
+      <code>$path</code>
+    </PossiblyInvalidArgument>
+  </file>
+  <file src="src/Command/NestedDepsCommand.php">
+    <MixedArgument occurrences="5">
+      <code>$package</code>
+      <code>$package-&gt;name</code>
+      <code>$package-&gt;name</code>
+      <code>$package['name']</code>
+      <code>$package['version']</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="3">
+      <code>$data</code>
+      <code>$package</code>
+      <code>$root</code>
+    </MixedAssignment>
+    <MixedPropertyFetch occurrences="2">
+      <code>$data-&gt;installed</code>
+      <code>$package-&gt;name</code>
+    </MixedPropertyFetch>
+  </file>
+  <file src="src/ComposerLockFile.php">
+    <MixedArgument occurrences="5">
+      <code>$composerJsonData</code>
+      <code>$name</code>
+      <code>$package</code>
+      <code>$package</code>
+      <code>$version</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="4">
+      <code>$composerJsonData['require']</code>
+      <code>$composerJsonData['require-dev']</code>
+      <code>$composerLockData['packages']</code>
+      <code>$composerLockData['packages-dev']</code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment occurrences="2">
+      <code>$composerJsonData['require']</code>
+      <code>$composerJsonData['require-dev']</code>
+    </MixedArrayAssignment>
+    <MixedArrayOffset occurrences="2">
+      <code>$composerJsonData['require'][$packageName]</code>
+      <code>$composerJsonData['require-dev'][$packageName]</code>
+    </MixedArrayOffset>
+    <MixedAssignment occurrences="12">
+      <code>$composerJsonData</code>
+      <code>$composerJsonData['require'][$packageName]</code>
+      <code>$composerJsonData['require-dev'][$packageName]</code>
+      <code>$composerLockData</code>
+      <code>$name</code>
+      <code>$package</code>
+      <code>$package</code>
+      <code>$packageName</code>
+      <code>$packageName</code>
+      <code>$version</code>
+      <code>$version</code>
+      <code>$version</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/DependencyPlugin.php">
+    <MixedArgument occurrences="1">
+      <code>$json</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$json['require']</code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment occurrences="1">
+      <code>$json['require']</code>
+    </MixedArrayAssignment>
+    <MixedAssignment occurrences="1">
+      <code>$json</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/PackageVersions.php">
+    <MixedArgumentTypeCoercion occurrences="4">
+      <code>$allPackageLists ? array_shift($allPackageLists) : []</code>
+      <code>$data</code>
+      <code>$data-&gt;packages + (isset($data-&gt;{'packages-dev'}) ? $data-&gt;{'packages-dev'} : [])</code>
+      <code>array_merge(...$allPackageLists)</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/SpecialCase/ComposerJsonExtraZFSpecialCase.php">
+    <MixedArgument occurrences="3">
+      <code>$composer</code>
+      <code>$extraLaminas</code>
+      <code>$extraZf</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="3">
+      <code>$composer['extra']['laminas']</code>
+      <code>$composer['extra']['zf']</code>
+      <code>$composer['extra']['zf']</code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment occurrences="1">
+      <code>$composer['extra']['laminas']</code>
+    </MixedArrayAssignment>
+    <MixedAssignment occurrences="4">
+      <code>$composer</code>
+      <code>$composer</code>
+      <code>$extraLaminas</code>
+      <code>$extraZf</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/SpecialCase/ComposerJsonZendFrameworkPackageSpecialCase.php">
+    <MissingClosureParamType occurrences="4">
+      <code>$a</code>
+      <code>$a</code>
+      <code>$b</code>
+      <code>$b</code>
+    </MissingClosureParamType>
+    <MixedArgument occurrences="4">
+      <code>$composer[$section]</code>
+      <code>$composer[$section]['zendframework/zendframework']</code>
+      <code>json_decode($content, true)</code>
+      <code>json_decode($content, true)</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="3">
+      <code>$composer[$section][$package]</code>
+      <code>$composer[$section]['zendframework/zendframework']</code>
+      <code>$composer[$section]['zendframework/zendframework']</code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment occurrences="1">
+      <code>$composer[$section][$normalized]</code>
+    </MixedArrayAssignment>
+    <MixedAssignment occurrences="3">
+      <code>$composer[$section][$normalized]</code>
+      <code>$constraint</code>
+      <code>$version</code>
+    </MixedAssignment>
+    <RedundantCastGivenDocblockType occurrences="1">
+      <code>strtolower</code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="src/VendorDirectory.php">
+    <MixedArrayAccess occurrences="1">
+      <code>$composer['config']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="1">
+      <code>$composer</code>
+    </MixedAssignment>
+  </file>
+  <file src="test/FileFilterTest.php">
+    <MixedAssignment occurrences="5">
+      <code>$file</code>
+      <code>$file</code>
+      <code>$file</code>
+      <code>$file</code>
+      <code>$file</code>
+    </MixedAssignment>
+  </file>
+  <file src="test/PackageVersionsTest.php">
+    <InternalClass occurrences="5">
+      <code>PackageVersions::APP_PACKAGE_NAME</code>
+      <code>PackageVersions::fromComposerFiles($composerFiles)</code>
+      <code>PackageVersions::getAppVersion()</code>
+      <code>new PackageVersions(['foo/bar' =&gt; '1.0.0'])</code>
+      <code>new PackageVersions([])</code>
+    </InternalClass>
+    <InternalMethod occurrences="5">
+      <code>PackageVersions::fromComposerFiles($composerFiles)</code>
+      <code>PackageVersions::getAppVersion()</code>
+      <code>getPackageVersion</code>
+      <code>getPackageVersion</code>
+      <code>getPackageVersion</code>
+    </InternalMethod>
+  </file>
+  <file src="test/SpecialCase/ComposerJsonExtraZFSpecialCaseTest.php">
+    <MixedAssignment occurrences="2">
+      <code>$expected</code>
+      <code>$replacements</code>
+    </MixedAssignment>
+  </file>
+  <file src="test/SpecialCase/ComposerJsonZendFrameworkPackageSpecialCaseTest.php">
+    <MixedAssignment occurrences="2">
+      <code>$expected</code>
+      <code>$replacements</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>iterable</code>
+    </MixedInferredReturnType>
+  </file>
+</files>

@@ -8,6 +8,7 @@
 
 namespace Laminas\Migration\Command;
 
+use InvalidArgumentException;
 use Laminas\Migration\BridgeConfigPostProcessor;
 use Laminas\Migration\BridgeModule;
 use Laminas\Migration\ComposerLockFile;
@@ -28,7 +29,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateCommand extends Command
 {
-    const HELP = <<< EOH
+    public const HELP = <<< EOH
 Migrate a project or library to target Laminas, Mezzio, and/or Laminas API
 Tools packages.
 
@@ -101,6 +102,9 @@ To update your lockfile, you can just use `composer update --lock`
 
 EOH;
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('migrate')
@@ -172,6 +176,7 @@ EOH;
         }
 
         $path = realpath($path);
+        assert(is_string($path), new InvalidArgumentException('Unable to determine realpath from provided path'));
 
         if ($input->getOption('keep-locked-versions')) {
             $this->synchronizeComposerJsonWithComposerLock($path, $io);
@@ -180,7 +185,7 @@ EOH;
         $this->removeComposerLock($path, $io);
         $this->removeVendorDirectory($path, $io);
         $this->injectDependencyPlugin($path, $input->getOption('no-plugin'), $io);
-        $this->migrateProjectFiles($path, $this->createFilter($path, $input), $io);
+        $this->migrateProjectFiles($path, $this->createFilter($input), $io);
 
         $disableConfigProcessorInjection = $input->getOption('no-config-processor');
         $this->injectBridgeModule($path, $disableConfigProcessorInjection, $io);
@@ -216,8 +221,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function removeComposerLock($path, SymfonyStyle $io)
+    private function removeComposerLock($path, SymfonyStyle $io): void
     {
         $composerLockFile = new ComposerLockFile();
         $composerLockFile->remove($path, $io);
@@ -225,8 +232,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function removeVendorDirectory($path, SymfonyStyle $io)
+    private function removeVendorDirectory($path, SymfonyStyle $io): void
     {
         $vendorDirectory = new VendorDirectory();
         $vendorDirectory->remove($path, $io);
@@ -235,8 +244,10 @@ EOH;
     /**
      * @param string $path
      * @param null|bool $noPluginOption
+     *
+     * @return void
      */
-    private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io)
+    private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io): void
     {
         $dependencyPlugin = new DependencyPlugin();
         $dependencyPlugin->inject($path, $noPluginOption, $io);
@@ -244,8 +255,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io)
+    private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io): void
     {
         $migration = new MigrateProject([
             new ComposerJsonExtraZFSpecialCase(),
@@ -258,20 +271,24 @@ EOH;
      * @param string $path
      * @return callable
      */
-    private function createFilter($path, InputInterface $input)
+    private function createFilter(InputInterface $input)
     {
-        return new FileFilter(
-            $path,
-            $input->getOption('filter'),
-            $input->getOption('exclude')
-        );
+        $filter = $input->getOption('filter');
+        assert(is_array($filter), new InvalidArgumentException('Invalid --filter option provided; expected array'));
+
+        $exclude = $input->getOption('exclude');
+        assert(is_array($exclude), new InvalidArgumentException('Invalid --exclude option provided; expected array'));
+
+        return new FileFilter($filter, $exclude);
     }
 
     /**
      * @param string $path
      * @param bool $disableConfigProcessorInjection
+     *
+     * @return void
      */
-    private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io)
+    private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io): void
     {
         $bridgeModule = new BridgeModule();
         $bridgeModule->inject($path, $disableConfigProcessorInjection, $io);
@@ -280,8 +297,10 @@ EOH;
     /**
      * @param string $path
      * @param bool $disableConfigProcessorInjection
+     *
+     * @return void
      */
-    private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io)
+    private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io): void
     {
         $bridgeConfigPostProcessor = new BridgeConfigPostProcessor();
         $bridgeConfigPostProcessor->inject($path, $disableConfigProcessorInjection, $io);
@@ -289,8 +308,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function synchronizeComposerJsonWithComposerLock($path, SymfonyStyle $io)
+    private function synchronizeComposerJsonWithComposerLock($path, SymfonyStyle $io): void
     {
         $lockFile = new ComposerLockFile();
         $lockFile->moveLockedVersionsToComposerJson($path, $io);

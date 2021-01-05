@@ -73,6 +73,10 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         $semver   = new Semver();
         $versions = array_keys(self::ZF_VERSIONS);
         usort($versions, static function ($a, $b) {
+            if (! is_string($a) || ! is_string($b)) {
+                return $b <=> $a;
+            }
+
             // Reverse sort by version
             $result = version_compare($a, $b);
             if ($result === 0) {
@@ -124,6 +128,10 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         // Sort the section.
         // Items not in vendor/package format bubble up.
         uksort($composer[$section], static function ($a, $b) {
+            if (! is_string($a) || ! is_string($b)) {
+                return $a <=> $b;
+            }
+
             if (strpos($a, '/') === false && strpos($b, '/') === false) {
                 return strcasecmp($a, $b);
             }
@@ -142,7 +150,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         return $composer;
     }
 
-    const ZF_VERSIONS = [
+    public const ZF_VERSIONS = [
         '2.0.0'  => self::ZF_2_0_0__2_0_6,
         '2.0.1'  => self::ZF_2_0_0__2_0_6,
         '2.0.2'  => self::ZF_2_0_0__2_0_6,
@@ -201,7 +209,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         '3.0.0'  => self::ZF_3_0_0,
     ];
 
-    const ZF_2_0_0__2_0_6 = [
+    public const ZF_2_0_0__2_0_6 = [
         'zendframework/zend-acl'            => 'self.version',
         'zendframework/zend-authentication' => 'self.version',
         'zendframework/zend-barcode'        => 'self.version',
@@ -251,7 +259,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-xmlrpc'         => 'self.version',
     ];
 
-    const ZF_2_0_7__2_0_8 = [
+    public const ZF_2_0_7__2_0_8 = [
         'zendframework/zend-authentication'  => 'self.version',
         'zendframework/zend-barcode'         => 'self.version',
         'zendframework/zend-cache'           => 'self.version',
@@ -302,7 +310,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-xmlrpc'          => 'self.version',
     ];
 
-    const ZF_2_1_0__2_2_1 = [
+    public const ZF_2_1_0__2_2_1 = [
         'zendframework/zend-authentication'   => 'self.version',
         'zendframework/zend-barcode'          => 'self.version',
         'zendframework/zend-cache'            => 'self.version',
@@ -355,7 +363,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-xmlrpc'           => 'self.version',
     ];
 
-    const ZF_2_2_2__2_4_13 = [
+    public const ZF_2_2_2__2_4_13 = [
         'zendframework/zend-authentication'   => 'self.version',
         'zendframework/zend-barcode'          => 'self.version',
         'zendframework/zend-cache'            => 'self.version',
@@ -409,7 +417,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zend-xmlrpc'           => 'self.version',
     ];
 
-    const ZF_2_5_0 = [
+    public const ZF_2_5_0 = [
         'zendframework/zend-authentication'   => '~2.5.0',
         'zendframework/zend-barcode'          => '~2.5.0',
         'zendframework/zend-cache'            => '~2.5.0',
@@ -464,7 +472,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zendxml'               => '~1.0',
     ];
 
-    const ZF_2_5_1 = [
+    public const ZF_2_5_1 = [
         'zendframework/zend-authentication'   => '~2.5.0',
         'zendframework/zend-barcode'          => '~2.5.0',
         'zendframework/zend-cache'            => '~2.5.0',
@@ -518,7 +526,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zendxml'               => '~1.0',
     ];
 
-    const ZF_2_5_2 = [
+    public const ZF_2_5_2 = [
         'zendframework/zend-authentication'   => '~2.5.0',
         'zendframework/zend-barcode'          => '~2.5.0',
         'zendframework/zend-cache'            => '~2.5.0',
@@ -572,7 +580,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zendxml'               => '^1.0.1',
     ];
 
-    const ZF_2_5_3 = [
+    public const ZF_2_5_3 = [
         'zendframework/zend-authentication'   => '^2.5',
         'zendframework/zend-barcode'          => '^2.5',
         'zendframework/zend-cache'            => '^2.5',
@@ -626,7 +634,7 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
         'zendframework/zendxml'               => '^1.0.1',
     ];
 
-    const ZF_3_0_0 = [
+    public const ZF_3_0_0 = [
         'zendframework/zend-authentication'    => '^2.5.3',
         'zendframework/zend-barcode'           => '^2.6',
         'zendframework/zend-cache'             => '^2.7.1',

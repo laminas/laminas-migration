@@ -20,6 +20,7 @@ class Helper
     {
         static $replacements;
 
+        /** @var Replacements $replacements */
         $replacements = $replacements ?: new Replacements([
             'Expressive\\' => 'Mezzio\\',
         ]);

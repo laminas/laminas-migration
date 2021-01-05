@@ -25,6 +25,7 @@ matrix:
     - php: 7.4
       env:
         - COMPAT_VERSION=7.4
+        - STATIC_ANALYSIS=true
     - php: 8.0
       env:
         - COMPAT_VERSION=8.0
@@ -38,6 +39,7 @@ install:
 script:
   - if [[ $RUN_TESTS != '' ]]; then composer test ; fi
   - composer cs-check -- -p src --standard=PHPCompatibility --runtime-set testVersion $COMPAT_VERSION
+  - if [[ $STATIC_ANALYSIS != '' ]]; then composer static-analysis ; fi
 
 notifications:
   email: false

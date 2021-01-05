@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class ComposerJsonExtraZFSpecialCaseTest extends TestCase
 {
-    public function testReplacesZendFrameworkPackageWithAppropriatePackagesAtAppropriateConstraint()
+    public function testReplacesZendFrameworkPackageWithAppropriatePackagesAtAppropriateConstraint(): void
     {
         $specialCase      = new ComposerJsonExtraZFSpecialCase();
         $file             = sprintf('%s/fixtures/extra/composer.json', __DIR__);

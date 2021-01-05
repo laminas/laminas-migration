@@ -21,6 +21,8 @@ class ComposerLockFile
 {
     /**
      * @param string $path
+     *
+     * @return void
      */
     public function remove($path, SymfonyStyle $io)
     {
@@ -34,6 +36,8 @@ class ComposerLockFile
 
     /**
      * @param string $path
+     *
+     * @return void
      */
     public function moveLockedVersionsToComposerJson($path, SymfonyStyle $io)
     {
@@ -52,7 +56,12 @@ class ComposerLockFile
         $composerLockData = json_decode(file_get_contents($composerLock), true);
         $composerJsonData = json_decode(file_get_contents($composerJson), true);
 
-        $mapper = static function (array $package) {
+        $mapper = /**
+         * @return (mixed|string)[]
+         *
+         * @psalm-return array{0: mixed, 1: mixed|string}
+         */
+        static function (array $package): array {
             $name = $package['name'];
             $version = $package['version'];
             $vendor = explode('/', $name, 2)[0];
@@ -82,7 +91,7 @@ class ComposerLockFile
         Helper::writeJson($composerJson, $composerJsonData);
     }
 
-    private function lockfile($path)
+    private function lockfile(string $path): string
     {
         return $path . '/composer.lock';
     }
