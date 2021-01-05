@@ -28,7 +28,7 @@ class DependencyPlugin
 
         $io->writeln('<info>Injecting laminas-dependency-plugin into composer.json</info>');
         $json = json_decode(file_get_contents($path . '/composer.json'), true);
-        $json['require']['laminas/laminas-dependency-plugin'] = '^1.0';
+        $json['require']['laminas/laminas-dependency-plugin'] = '^2.1';
         Helper::writeJson($path . '/composer.json', $json);
     }
 }
