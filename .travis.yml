@@ -38,6 +38,9 @@ matrix:
       env:
         - COMPAT_VERSION=7.4
 
+before_install:
+  - composer self-update --1
+
 install:
   - composer update $COMPOSER_ARGS
   - if [[ $RUN_TESTS != '' ]]; then composer require $RUN_TESTS ; fi
