@@ -34,6 +34,9 @@ replacements of their ZF equivalents, this will remove the ZF packages
 as well.
 EOH;
 
+    /**
+     * @return void
+     */
     public function configure()
     {
         $this->setName('nested-deps')
@@ -100,7 +103,7 @@ EOH;
             return 0;
         }
 
-        $createPackageSpec = static function (array $package) {
+        $createPackageSpec = static function (array $package): string {
             return sprintf('"%s:~%s"', Helper::replace($package['name']), ltrim($package['version'], 'v'));
         };
 

@@ -38,9 +38,12 @@ class ComposerJsonZendFrameworkPackageSpecialCaseTest extends TestCase
 
     /**
      * @dataProvider expectedReplacements
+     *
      * @param string $directory
+     *
+     * @return void
      */
-    public function testReplacesZendFrameworkPackageWithAppropriatePackagesAtAppropriateConstraint($directory)
+    public function testReplacesZendFrameworkPackageWithAppropriatePackagesAtAppropriateConstraint($directory): void
     {
         $specialCase      = new ComposerJsonZendFrameworkPackageSpecialCase();
         $file             = sprintf('%s/fixtures/%s/composer.json', __DIR__, $directory);

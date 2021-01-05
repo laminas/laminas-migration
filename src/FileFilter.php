@@ -135,14 +135,14 @@ class FileFilter
         return true;
     }
 
-    private function prependCommonExclusions()
+    private function prependCommonExclusions(): void
     {
         array_unshift($this->exclusions, '/.hg');
         array_unshift($this->exclusions, '/.svn');
         array_unshift($this->exclusions, '/.git');
     }
 
-    private function prepareExclusionPatterns()
+    private function prepareExclusionPatterns(): void
     {
         // Create list of directory patterns to check against
         $directory = new Directory();

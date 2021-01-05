@@ -100,9 +100,12 @@ final class PackageVersions
 
     /**
      * @param object[] $composerPackageList
-     * @return self
+     *
+     * @return (mixed|string)[]
+     *
+     * @psalm-return array<array-key, mixed|string>
      */
-    private static function buildMapFromPackageList(array $composerPackageList)
+    private static function buildMapFromPackageList(array $composerPackageList): array
     {
         return array_reduce(
             $composerPackageList,

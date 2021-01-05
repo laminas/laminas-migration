@@ -54,6 +54,9 @@ class FileFilterTest extends TestCase
         }
     }
 
+    /**
+     * @param false|string $path
+     */
     public function getDirectoryIterator($path): RecursiveDirectoryIterator
     {
         return new RecursiveDirectoryIterator(
@@ -62,7 +65,7 @@ class FileFilterTest extends TestCase
         );
     }
 
-    public function testOmitsVcsDirectoriesByDefault()
+    public function testOmitsVcsDirectoriesByDefault(): void
     {
         $path   = realpath(dirname(__DIR__));
         $filter = new FileFilter($path, [], []);
@@ -82,7 +85,7 @@ class FileFilterTest extends TestCase
         }
     }
 
-    public function testDoesNotReturnFilesInExcludedDirectories()
+    public function testDoesNotReturnFilesInExcludedDirectories(): void
     {
         $path   = realpath(dirname(__DIR__));
         $filter = new FileFilter($path, [], ['/vendor']);
@@ -102,7 +105,7 @@ class FileFilterTest extends TestCase
         }
     }
 
-    public function testDoesNotReturnExcludedFiles()
+    public function testDoesNotReturnExcludedFiles(): void
     {
         $exclusions = ['CHANGELOG.md', 'COPYRIGHT.md', 'LICENSE.md'];
         $path       = realpath(dirname(__DIR__));
@@ -127,7 +130,7 @@ class FileFilterTest extends TestCase
         }
     }
 
-    public function testOnlyReturnsFilesMatchingOneOrMoreRegexes()
+    public function testOnlyReturnsFilesMatchingOneOrMoreRegexes(): void
     {
         $regexes = [
             'src/.*?',
@@ -160,7 +163,7 @@ class FileFilterTest extends TestCase
         }
     }
 
-    public function testOnlyReturnsFilesMatchingARegexThatAreNotAlsoExcluded()
+    public function testOnlyReturnsFilesMatchingARegexThatAreNotAlsoExcluded(): void
     {
         $regexes = [
             'src/.*?',

@@ -33,6 +33,8 @@ class VendorDirectory extends Directory
 
     /**
      * @param string $path
+     *
+     * @return void
      */
     public function remove($path, SymfonyStyle $io)
     {

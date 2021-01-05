@@ -101,6 +101,9 @@ To update your lockfile, you can just use `composer update --lock`
 
 EOH;
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('migrate')
@@ -216,8 +219,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function removeComposerLock($path, SymfonyStyle $io)
+    private function removeComposerLock($path, SymfonyStyle $io): void
     {
         $composerLockFile = new ComposerLockFile();
         $composerLockFile->remove($path, $io);
@@ -225,8 +230,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function removeVendorDirectory($path, SymfonyStyle $io)
+    private function removeVendorDirectory($path, SymfonyStyle $io): void
     {
         $vendorDirectory = new VendorDirectory();
         $vendorDirectory->remove($path, $io);
@@ -235,8 +242,10 @@ EOH;
     /**
      * @param string $path
      * @param null|bool $noPluginOption
+     *
+     * @return void
      */
-    private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io)
+    private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io): void
     {
         $dependencyPlugin = new DependencyPlugin();
         $dependencyPlugin->inject($path, $noPluginOption, $io);
@@ -244,8 +253,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io)
+    private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io): void
     {
         $migration = new MigrateProject([
             new ComposerJsonExtraZFSpecialCase(),
@@ -270,8 +281,10 @@ EOH;
     /**
      * @param string $path
      * @param bool $disableConfigProcessorInjection
+     *
+     * @return void
      */
-    private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io)
+    private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io): void
     {
         $bridgeModule = new BridgeModule();
         $bridgeModule->inject($path, $disableConfigProcessorInjection, $io);
@@ -280,8 +293,10 @@ EOH;
     /**
      * @param string $path
      * @param bool $disableConfigProcessorInjection
+     *
+     * @return void
      */
-    private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io)
+    private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io): void
     {
         $bridgeConfigPostProcessor = new BridgeConfigPostProcessor();
         $bridgeConfigPostProcessor->inject($path, $disableConfigProcessorInjection, $io);
@@ -289,8 +304,10 @@ EOH;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    private function synchronizeComposerJsonWithComposerLock($path, SymfonyStyle $io)
+    private function synchronizeComposerJsonWithComposerLock($path, SymfonyStyle $io): void
     {
         $lockFile = new ComposerLockFile();
         $lockFile->moveLockedVersionsToComposerJson($path, $io);
