@@ -2,16 +2,31 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.3.0 - TBD
+
+### Added
+
+- [#55](https://github.com/laminas/laminas-migration/pull/55) adds support for PHP 8.0.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#55](https://github.com/laminas/laminas-migration/pull/55) removes support for PHP versions prior to 7.3; if you need to use an older PHP version, use the 1.2.2 release instead.
+
+### Fixed
+
+- Nothing.
+
 ## 1.2.3 - 2021-01-05
 
-
------
-
 ### Release Notes for [1.2.3](https://github.com/laminas/laminas-migration/milestone/4)
-
-
-
-### 1.2.3
 
 - Total issues resolved: **1**
 - Total pull requests resolved: **1**
@@ -19,7 +34,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 #### Bug
 
- - [58: Ensure extra.zf configuration is renamed to extra.laminas](https://github.com/laminas/laminas-migration/pull/58) thanks to @weierophinney and @boesing
+- [58: Ensure extra.zf configuration is renamed to extra.laminas](https://github.com/laminas/laminas-migration/pull/58) thanks to @weierophinney and @boesing
 
 ## 1.2.2 - 2020-06-23
 
