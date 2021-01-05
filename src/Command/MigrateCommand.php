@@ -14,6 +14,7 @@ use Laminas\Migration\ComposerLockFile;
 use Laminas\Migration\DependencyPlugin;
 use Laminas\Migration\FileFilter;
 use Laminas\Migration\MigrateProject;
+use Laminas\Migration\SpecialCase\ComposerJsonExtraZFSpecialCase;
 use Laminas\Migration\SpecialCase\ComposerJsonZendFrameworkPackageSpecialCase;
 use Laminas\Migration\VendorDirectory;
 use Symfony\Component\Console\Command\Command;
@@ -247,6 +248,7 @@ EOH;
     private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io)
     {
         $migration = new MigrateProject([
+            new ComposerJsonExtraZFSpecialCase(),
             new ComposerJsonZendFrameworkPackageSpecialCase(),
         ]);
         $migration($path, $filter, $io);
