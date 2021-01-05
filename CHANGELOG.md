@@ -2,27 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.3 - TBD
+## 1.2.3 - 2021-01-05
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [1.2.3](https://github.com/laminas/laminas-migration/milestone/4)
 
-- Nothing.
 
-### Deprecated
 
-- Nothing.
+### 1.2.3
 
-### Removed
+- Total issues resolved: **1**
+- Total pull requests resolved: **1**
+- Total contributors: **2**
 
-- Nothing.
+#### Bug
 
-### Fixed
-
-- Nothing.
+ - [58: Ensure extra.zf configuration is renamed to extra.laminas](https://github.com/laminas/laminas-migration/pull/58) thanks to @weierophinney and @boesing
 
 ## 1.2.2 - 2020-06-23
 
