@@ -61,5 +61,8 @@
         "zendframework/zend-xml2json": "^3.0",
         "zendframework/zend-xmlrpc": "^2.6",
         "zendframework/zendxml": "^1.0.2"
+    },
+    "extra": {
+        "laminas": {}
     }
 }

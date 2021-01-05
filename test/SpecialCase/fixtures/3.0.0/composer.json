@@ -1,5 +1,8 @@
 {
   "require": {
     "zendframework/zendframework": "3.0.0"
+  },
+  "extra": {
+      "zf": {}
   }
 }
