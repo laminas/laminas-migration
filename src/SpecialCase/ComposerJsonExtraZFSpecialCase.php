@@ -39,7 +39,6 @@ class ComposerJsonExtraZFSpecialCase implements SpecialCaseInterface
         unset($composer['extra']['zf']);
         $composer['extra']['laminas'] = array_replace_recursive($extraZf, $extraLaminas);
 
-
         return $composer;
     }
 }
