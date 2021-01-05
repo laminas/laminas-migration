@@ -30,6 +30,9 @@ matrix:
         - COMPAT_VERSION=8.0
         - COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
 
+before_install:
+  - composer self-update --1
+
 install:
   - composer update $COMPOSER_ARGS
   - if [[ $RUN_TESTS != '' ]]; then composer require $RUN_TESTS ; fi
