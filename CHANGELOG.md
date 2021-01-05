@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#60](https://github.com/laminas/laminas-migration/pull/60) bumps the injected laminas/laminas-dependency-plugin constraint to `2.1` to allow usage with Composer v2 releases.
 
 ### Deprecated
 
