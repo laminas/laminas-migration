@@ -2,9 +2,6 @@
     "name": "laminas/laminas-migration",
     "description": "Migrate a Zend Framework project or third-party library to target Laminas/Expressive/Apigility",
     "license": "BSD-3-Clause",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "^7.3 || ~8.0.0",
         "ext-json": "*",
@@ -20,6 +17,10 @@
         "roave/security-advisories": "dev-master",
         "vimeo/psalm": "^4.3"
     },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {},
     "autoload": {
         "psr-4": {
             "Laminas\\Migration\\": "src/"
@@ -29,8 +30,6 @@
         "psr-4": {
             "LaminasTest\\Migration\\": "test/"
         }
-    },
-    "extra": {
     },
     "bin": [
         "bin/laminas-migration"
