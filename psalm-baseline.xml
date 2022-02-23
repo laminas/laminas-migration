@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.3.2@57b53ff26237074fdf5cbcb034f7da5172be4524">
+<files psalm-version="4.21.0@d8bec4c7aaee111a532daec32fb09de5687053d1">
   <file src="src/Command/MigrateCommand.php">
-    <MixedInferredReturnType occurrences="1">
-      <code>bool</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$helper-&gt;ask($input, $output, $question)</code>
-    </MixedReturnStatement>
-    <PossiblyInvalidArgument occurrences="6">
+    <MixedArgument occurrences="6">
       <code>$disableConfigProcessorInjection</code>
       <code>$disableConfigProcessorInjection</code>
       <code>$input-&gt;getOption('no-plugin')</code>
       <code>$path</code>
       <code>$path</code>
       <code>$path</code>
-    </PossiblyInvalidArgument>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion occurrences="2">
+      <code>$exclude</code>
+      <code>$filter</code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment occurrences="2">
+      <code>$disableConfigProcessorInjection</code>
+      <code>$path</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>bool</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>$helper-&gt;ask($input, $output, $question)</code>
+    </MixedReturnStatement>
   </file>
   <file src="src/Command/NestedDepsCommand.php">
     <MixedArgument occurrences="5">
@@ -24,6 +32,10 @@
       <code>$package['name']</code>
       <code>$package['version']</code>
     </MixedArgument>
+    <MixedArgumentTypeCoercion occurrences="2">
+      <code>$results</code>
+      <code>$results</code>
+    </MixedArgumentTypeCoercion>
     <MixedAssignment occurrences="3">
       <code>$data</code>
       <code>$package</code>
@@ -33,6 +45,11 @@
       <code>$data-&gt;installed</code>
       <code>$package-&gt;name</code>
     </MixedPropertyFetch>
+    <PossiblyInvalidDocblockTag occurrences="3">
+      <code>@var bool $dev</code>
+      <code>@var string $name</code>
+      <code>@var string $version</code>
+    </PossiblyInvalidDocblockTag>
   </file>
   <file src="src/ComposerLockFile.php">
     <MixedArgument occurrences="5">
@@ -85,6 +102,11 @@
       <code>$json</code>
     </MixedAssignment>
   </file>
+  <file src="src/MigrateProject.php">
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$filter</code>
+    </MixedArgumentTypeCoercion>
+  </file>
   <file src="src/PackageVersions.php">
     <MixedArgumentTypeCoercion occurrences="4">
       <code>$allPackageLists ? array_shift($allPackageLists) : []</code>
@@ -115,15 +137,10 @@
     </MixedAssignment>
   </file>
   <file src="src/SpecialCase/ComposerJsonZendFrameworkPackageSpecialCase.php">
-    <MissingClosureParamType occurrences="4">
-      <code>$a</code>
-      <code>$a</code>
-      <code>$b</code>
-      <code>$b</code>
-    </MissingClosureParamType>
-    <MixedArgument occurrences="4">
+    <MixedArgument occurrences="5">
       <code>$composer[$section]</code>
       <code>$composer[$section]['zendframework/zendframework']</code>
+      <code>$package</code>
       <code>json_decode($content, true)</code>
       <code>json_decode($content, true)</code>
     </MixedArgument>
@@ -135,14 +152,21 @@
     <MixedArrayAssignment occurrences="1">
       <code>$composer[$section][$normalized]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="3">
+    <MixedArrayOffset occurrences="1">
+      <code>$composer[$section][$package]</code>
+    </MixedArrayOffset>
+    <MixedAssignment occurrences="4">
       <code>$composer[$section][$normalized]</code>
       <code>$constraint</code>
+      <code>$package</code>
       <code>$version</code>
     </MixedAssignment>
-    <RedundantCastGivenDocblockType occurrences="1">
-      <code>strtolower</code>
-    </RedundantCastGivenDocblockType>
+    <UnusedParam occurrences="1">
+      <code>$semver</code>
+    </UnusedParam>
+    <UnusedVariable occurrences="1">
+      <code>$isProduction</code>
+    </UnusedVariable>
   </file>
   <file src="src/VendorDirectory.php">
     <MixedArrayAccess occurrences="1">
@@ -153,6 +177,7 @@
     </MixedAssignment>
   </file>
   <file src="test/FileFilterTest.php">
+    <InvalidArgument occurrences="5"/>
     <MixedAssignment occurrences="5">
       <code>$file</code>
       <code>$file</code>
@@ -169,12 +194,14 @@
       <code>new PackageVersions(['foo/bar' =&gt; '1.0.0'])</code>
       <code>new PackageVersions([])</code>
     </InternalClass>
-    <InternalMethod occurrences="5">
+    <InternalMethod occurrences="7">
       <code>PackageVersions::fromComposerFiles($composerFiles)</code>
       <code>PackageVersions::getAppVersion()</code>
       <code>getPackageVersion</code>
       <code>getPackageVersion</code>
       <code>getPackageVersion</code>
+      <code>new PackageVersions(['foo/bar' =&gt; '1.0.0'])</code>
+      <code>new PackageVersions([])</code>
     </InternalMethod>
   </file>
   <file src="test/SpecialCase/ComposerJsonExtraZFSpecialCaseTest.php">
