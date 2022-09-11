@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration;
 
@@ -54,7 +50,7 @@ class BridgeConfigPostProcessor
             return;
         }
 
-        $search = $matches['prelude'];
+        $search      = $matches['prelude'];
         $replacement = sprintf(
             '%s, [\Laminas\ZendFrameworkBridge\ConfigPostProcessor::class]',
             $matches['prelude']

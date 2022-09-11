@@ -1,18 +1,35 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration\SpecialCase;
 
 use Composer\Semver\Semver;
 use RuntimeException;
 
+use function array_keys;
+use function array_merge;
+use function is_string;
+use function json_decode;
+use function json_encode;
+use function preg_match;
+use function sprintf;
+use function strcasecmp;
+use function strpos;
+use function strtolower;
+use function uksort;
+use function usort;
+use function version_compare;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function matches($filename, $content)
     {
         if (! preg_match('#\bcomposer\.json$#', $filename)) {
@@ -24,6 +41,9 @@ class ComposerJsonZendFrameworkPackageSpecialCase implements SpecialCaseInterfac
             || isset($composer['require-dev']['zendframework/zendframework']);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function replace($content)
     {
         $composer = $this->normalizePackageNames(json_decode($content, true));

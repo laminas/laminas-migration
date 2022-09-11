@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration;
 
@@ -20,17 +16,13 @@ use function trim;
 
 class FileFilter
 {
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $directoryExclusions = [];
 
     /** @var string[] */
     private $exclusions = [];
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $fileExclusions = [];
 
     /** @var string[] */
@@ -39,7 +31,6 @@ class FileFilter
     /**
      * @param string[] $regexes
      * @param string[] $exclusions
-     * @return self
      */
     public function __construct(array $regexes, array $exclusions)
     {
@@ -138,7 +129,7 @@ class FileFilter
     private function prepareExclusionPatterns(): void
     {
         // Create list of directory patterns to check against
-        $directory = new Directory();
+        $directory                 = new Directory();
         $this->directoryExclusions = array_map(static function ($exclusion) use ($directory) {
             return sprintf('/%s', trim($directory->normalizePath($exclusion), '/'));
         }, $this->exclusions);

@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration;
 
@@ -14,6 +10,7 @@ use function array_merge;
 use function array_reduce;
 use function array_shift;
 use function assert;
+use function count;
 use function file_get_contents;
 use function is_array;
 use function is_object;
@@ -26,12 +23,10 @@ use function json_decode;
 final class PackageVersions
 {
     public const COMPOSER_INSTALLED = __DIR__ . '/../../../../composer/installed.json';
-    public const COMPOSER_LOCK = __DIR__ . '/../../../../../composer.lock';
-    public const APP_PACKAGE_NAME = 'laminas/laminas-migration';
+    public const COMPOSER_LOCK      = __DIR__ . '/../../../../../composer.lock';
+    public const APP_PACKAGE_NAME   = 'laminas/laminas-migration';
 
-    /**
-     * @var array<string, string>
-     */
+    /** @var array<string, string> */
     private $packages;
 
     /**
@@ -61,9 +56,9 @@ final class PackageVersions
                 assert(is_object($data) && isset($data->packages) && is_array($data->packages));
                 assert(! isset($data->{'packages-dev'}) || is_array($data->{'packages-dev'}));
 
-                return self::buildMapFromPackageList(
-                    $data->packages + (isset($data->{'packages-dev'}) ? $data->{'packages-dev'} : [])
-                );
+                /** @var array<string, object> $devPackages */
+                $devPackages = $data->packages + ($data->{'packages-dev'} ?? []);
+                return self::buildMapFromPackageList($devPackages);
             },
             array_filter(
                 $composerFiles,
@@ -93,16 +88,12 @@ final class PackageVersions
      */
     public function getPackageVersion($packageName)
     {
-        return isset($this->packages[$packageName])
-            ? $this->packages[$packageName]
-            : 'UNKNOWN';
+        return $this->packages[$packageName] ?? 'UNKNOWN';
     }
 
     /**
      * @param object[] $composerPackageList
-     *
      * @return (mixed|string)[]
-     *
      * @psalm-return array<array-key, mixed|string>
      */
     private static function buildMapFromPackageList(array $composerPackageList): array

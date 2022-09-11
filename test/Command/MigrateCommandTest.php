@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace LaminasTest\Migration\Command;
 
@@ -16,6 +12,10 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function fopen;
+use function fwrite;
+use function rewind;
 
 class MigrateCommandTest extends TestCase
 {

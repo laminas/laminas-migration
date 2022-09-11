@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration;
 
@@ -51,7 +47,7 @@ class BridgeModule
             return;
         }
 
-        $search = $matches['prelude'] . $matches['space'];
+        $search      = $matches['prelude'] . $matches['space'];
         $replacement = sprintf(
             '%s%s\'Laminas\ZendFrameworkBridge\',%s',
             $matches['prelude'],

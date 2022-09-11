@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration\Command;
 
@@ -16,6 +12,26 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function array_filter;
+use function array_key_exists;
+use function array_map;
+use function array_shift;
+use function assert;
+use function chdir;
+use function exec;
+use function getcwd;
+use function implode;
+use function is_string;
+use function json_decode;
+use function ltrim;
+use function passthru;
+use function preg_match;
+use function sprintf;
+use function strpos;
+use function trim;
+
+use const PHP_EOL;
 
 class NestedDepsCommand extends Command
 {
@@ -76,7 +92,7 @@ EOH;
 
         $command = sprintf('%s show -f json', $composer);
         $results = [];
-        $status = 0;
+        $status  = 0;
 
         exec($command, $results, $status);
 
@@ -112,7 +128,7 @@ EOH;
         };
 
         // Require root packages
-        $success = $this->requirePackages(
+        $success    = $this->requirePackages(
             $output,
             $composer,
             array_map(
@@ -125,7 +141,7 @@ EOH;
         );
 
         // Require dev packages
-        $success = $this->requirePackages(
+        $success    = $this->requirePackages(
             $output,
             $composer,
             array_map(
@@ -151,9 +167,9 @@ EOH;
     private function preparePackageInfo(stdClass $package, $composer, OutputInterface $output)
     {
         return [
-            'name' => $package->name,
+            'name'    => $package->name,
             'version' => $package->version,
-            'dev' => $this->isDevPackage($package->name, $composer, $output),
+            'dev'     => $this->isDevPackage($package->name, $composer, $output),
         ];
     }
 
@@ -166,7 +182,7 @@ EOH;
     {
         $command = sprintf('%s why -r %s', $composer, $packageName);
         $results = [];
-        $status = 0;
+        $status  = 0;
 
         exec($command, $results, $status);
 

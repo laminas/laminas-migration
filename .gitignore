@@ -1,2 +1,4 @@
+/.phpcs-cache
+/phpunit.xml
 /vendor/
 /.phpunit.result.cache
