@@ -5,14 +5,14 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.3.99"
+            "php": "7.4.99"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "require": {
-        "php": "^7.3 || ~8.0.0",
+        "php": "^7.4 || ~8.0.0",
         "ext-json": "*",
         "composer/semver": "^1.0 || ^2.0 || ^3.0",
         "laminas/laminas-zendframework-bridge": "^1.4.1",
@@ -42,7 +42,7 @@
         "bin/laminas-migration"
     ],
     "scripts": {
-        "check-compat": "for VERSION in 7.3 7.4 8.0;do ./vendor/bin/phpcs -- -p src --standard=PHPCompatibility --runtime-set testVersion $VERSION ; done",
+        "check-compat": "for VERSION in 7.4 8.0;do ./vendor/bin/phpcs -- -p src --standard=PHPCompatibility --runtime-set testVersion $VERSION ; done",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "static-analysis": "psalm --shepherd --stats",
