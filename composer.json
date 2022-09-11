@@ -16,7 +16,7 @@
         "ext-json": "*",
         "composer/semver": "^1.0 || ^2.0 || ^3.0",
         "laminas/laminas-zendframework-bridge": "^1.4.1",
-        "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0"
+        "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0 || ^6.0"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^v0.7.2",
