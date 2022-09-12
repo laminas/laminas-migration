@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace LaminasTest\Migration;
 
@@ -16,6 +12,18 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use SplFileInfo;
+
+use function array_map;
+use function dirname;
+use function file_exists;
+use function implode;
+use function is_dir;
+use function mkdir;
+use function preg_match;
+use function preg_quote;
+use function realpath;
+use function sprintf;
+use function touch;
 
 class FileFilterTest extends TestCase
 {
@@ -33,7 +41,7 @@ class FileFilterTest extends TestCase
     public function cleanDirectories(): void
     {
         $directory = new Directory();
-        $baseDir = dirname(__DIR__);
+        $baseDir   = dirname(__DIR__);
         foreach (['.hg', '.svn'] as $dir) {
             $path = sprintf('%s/%s', $baseDir, $dir);
             if (is_dir($path)) {

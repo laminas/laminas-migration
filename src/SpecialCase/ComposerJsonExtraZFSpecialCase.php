@@ -1,15 +1,23 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration\SpecialCase;
 
+use function array_replace_recursive;
+use function json_decode;
+use function json_encode;
+use function preg_match;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class ComposerJsonExtraZFSpecialCase implements SpecialCaseInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function matches($filename, $content)
     {
         if (! preg_match('#\bcomposer\.json$#', $filename)) {
@@ -20,6 +28,9 @@ class ComposerJsonExtraZFSpecialCase implements SpecialCaseInterface
         return isset($composer['extra']['zf']);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function replace($content)
     {
         $composer = json_decode($content, true);
@@ -33,8 +44,8 @@ class ComposerJsonExtraZFSpecialCase implements SpecialCaseInterface
      */
     private function updateComposer(array $composer)
     {
-        $extraZf = $composer['extra']['zf'];
-        $extraLaminas = isset($composer['extra']['laminas']) ? $composer['extra']['laminas'] : [];
+        $extraZf      = $composer['extra']['zf'];
+        $extraLaminas = $composer['extra']['laminas'] ?? [];
 
         unset($composer['extra']['zf']);
         $composer['extra']['laminas'] = array_replace_recursive($extraZf, $extraLaminas);

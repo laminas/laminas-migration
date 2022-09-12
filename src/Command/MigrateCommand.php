@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\Migration\Command;
 
@@ -27,9 +23,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function assert;
+use function file_exists;
+use function getcwd;
+use function is_array;
+use function is_string;
+use function realpath;
+use function sprintf;
+
 class MigrateCommand extends Command
 {
-    public const HELP = <<< EOH
+    public const HELP = <<<EOH
 Migrate a project or library to target Laminas, Mezzio, and/or Laminas API
 Tools packages.
 
@@ -196,7 +200,7 @@ EOH;
             '<info>Next steps:</info>',
             '- Perform a diff to verify the changes made.',
             '- Run "composer install".',
-            '- Run any tests (unit tests, integration tests, end-to-end tests, etc.).'
+            '- Run any tests (unit tests, integration tests, end-to-end tests, etc.).',
         ]);
 
         return 0;
@@ -221,8 +225,6 @@ EOH;
 
     /**
      * @param string $path
-     *
-     * @return void
      */
     private function removeComposerLock($path, SymfonyStyle $io): void
     {
@@ -232,8 +234,6 @@ EOH;
 
     /**
      * @param string $path
-     *
-     * @return void
      */
     private function removeVendorDirectory($path, SymfonyStyle $io): void
     {
@@ -244,8 +244,6 @@ EOH;
     /**
      * @param string $path
      * @param null|bool $noPluginOption
-     *
-     * @return void
      */
     private function injectDependencyPlugin($path, $noPluginOption, SymfonyStyle $io): void
     {
@@ -255,8 +253,6 @@ EOH;
 
     /**
      * @param string $path
-     *
-     * @return void
      */
     private function migrateProjectFiles($path, callable $filter, SymfonyStyle $io): void
     {
@@ -285,8 +281,6 @@ EOH;
     /**
      * @param string $path
      * @param bool $disableConfigProcessorInjection
-     *
-     * @return void
      */
     private function injectBridgeModule($path, $disableConfigProcessorInjection, SymfonyStyle $io): void
     {
@@ -297,8 +291,6 @@ EOH;
     /**
      * @param string $path
      * @param bool $disableConfigProcessorInjection
-     *
-     * @return void
      */
     private function injectBridgeConfigPostProcessor($path, $disableConfigProcessorInjection, SymfonyStyle $io): void
     {
@@ -308,8 +300,6 @@ EOH;
 
     /**
      * @param string $path
-     *
-     * @return void
      */
     private function synchronizeComposerJsonWithComposerLock($path, SymfonyStyle $io): void
     {

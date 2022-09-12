@@ -1,15 +1,15 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-migration for the canonical source repository
- * @copyright https://github.com/laminas/laminas-migration/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-migration/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace LaminasTest\Migration\SpecialCase;
 
 use Laminas\Migration\SpecialCase\ComposerJsonExtraZFSpecialCase;
 use PHPUnit\Framework\TestCase;
+
+use function file_get_contents;
+use function json_decode;
+use function sprintf;
 
 class ComposerJsonExtraZFSpecialCaseTest extends TestCase
 {

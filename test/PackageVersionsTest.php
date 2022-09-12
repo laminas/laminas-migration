@@ -34,43 +34,43 @@ class PackageVersionsTest extends TestCase
     public function provideComposerFilesTestData(): iterable
     {
         return [
-            'both-present' => [
+            'both-present'      => [
                 [
                     __DIR__ . '/composer-fixtures/installed.json',
                     __DIR__ . '/composer-fixtures/composer.lock',
                 ],
-                '1.0.2'
+                '1.0.2',
             ],
-            'lock-missing' => [
+            'lock-missing'      => [
                 [
                     __DIR__ . '/composer-fixtures/installed.json',
                     __DIR__ . '/composer-fixtures/missing-composer.lock',
                 ],
-                '1.0.2'
+                '1.0.2',
             ],
             'installed-missing' => [
                 [
                     __DIR__ . '/composer-fixtures/missing-installed.json',
                     __DIR__ . '/composer-fixtures/composer.lock',
                 ],
-                '1.0.2'
+                '1.0.2',
             ],
-            'both-missing' => [
+            'both-missing'      => [
                 [
                     __DIR__ . '/composer-fixtures/missing-installed.json',
                     __DIR__ . '/composer-fixtures/missing-composer.lock',
                 ],
-                'UNKNOWN'
+                'UNKNOWN',
             ],
             'only-one-provided' => [
                 [
                     __DIR__ . '/composer-fixtures/installed.json',
                 ],
-                '1.0.2'
+                '1.0.2',
             ],
-            'empty-list' => [
+            'empty-list'        => [
                 [],
-                'UNKNOWN'
+                'UNKNOWN',
             ],
         ];
     }

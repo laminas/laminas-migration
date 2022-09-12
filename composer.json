@@ -5,22 +5,21 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.3.99"
+            "php": "7.4.99"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "require": {
-        "php": "^7.3 || ~8.0.0",
+        "php": "^7.4 || ~8.0.0 || ~8.1.0",
         "ext-json": "*",
-        "composer/semver": "^1.0 || ^2.0 || ^3.0",
+        "composer/semver": "^1.4 || ^2.0 || ^3.0",
         "laminas/laminas-zendframework-bridge": "^1.4.1",
-        "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0"
+        "symfony/console": "^3.4.17 || ^4.0 || ^5.0 || ^6.0"
     },
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^v0.7.2",
-        "phpcompatibility/php-compatibility": "^9.3.5",
+        "laminas/laminas-coding-standard": "~2.4.0",
         "phpunit/phpunit": "9.5.24",
         "psalm/plugin-phpunit": "^0.17.0",
         "roave/security-advisories": "dev-master",
@@ -42,7 +41,6 @@
         "bin/laminas-migration"
     ],
     "scripts": {
-        "check-compat": "for VERSION in 7.3 7.4 8.0;do ./vendor/bin/phpcs -- -p src --standard=PHPCompatibility --runtime-set testVersion $VERSION ; done",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "static-analysis": "psalm --shepherd --stats",
