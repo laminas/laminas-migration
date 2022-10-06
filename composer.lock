@@ -2811,12 +2811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "51ff2179e48fdb0d495649a9c0681f46de777f4e"
+                "reference": "b0d3e99ce9c8ec237338a70277dd409ffcf6cedc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/51ff2179e48fdb0d495649a9c0681f46de777f4e",
-                "reference": "51ff2179e48fdb0d495649a9c0681f46de777f4e",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b0d3e99ce9c8ec237338a70277dd409ffcf6cedc",
+                "reference": "b0d3e99ce9c8ec237338a70277dd409ffcf6cedc",
                 "shasum": ""
             },
             "conflict": {
@@ -3100,7 +3100,7 @@
                 "pressbooks/pressbooks": "<5.18",
                 "prestashop/autoupgrade": ">=4,<4.10.1",
                 "prestashop/blockwishlist": ">=2,<2.1.1",
-                "prestashop/contactform": ">1.0.1,<4.3",
+                "prestashop/contactform": ">=1.0.1,<4.3",
                 "prestashop/gamification": "<2.3.2",
                 "prestashop/prestashop": ">=1.6.0.10,<1.7.8.7",
                 "prestashop/productcomments": "<5.0.2",
@@ -3327,7 +3327,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-01T16:04:26+00:00"
+            "time": "2022-10-05T15:07:13+00:00"
         },
         {
             "name": "sebastian/cli-parser",
