@@ -2811,12 +2811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "b0d3e99ce9c8ec237338a70277dd409ffcf6cedc"
+                "reference": "b311503298c072e565411e3ef61c04519272473f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b0d3e99ce9c8ec237338a70277dd409ffcf6cedc",
-                "reference": "b0d3e99ce9c8ec237338a70277dd409ffcf6cedc",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b311503298c072e565411e3ef61c04519272473f",
+                "reference": "b311503298c072e565411e3ef61c04519272473f",
                 "shasum": ""
             },
             "conflict": {
@@ -2867,7 +2867,7 @@
                 "cesnet/simplesamlphp-module-proxystatistics": "<3.1",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<=3.0.6",
-                "codeigniter4/framework": "<4.1.9",
+                "codeigniter4/framework": "<4.2.7",
                 "codeigniter4/shield": "= 1.0.0-beta",
                 "codiad/codiad": "<=2.8.4",
                 "composer/composer": "<1.10.26|>=2-alpha.1,<2.2.12|>=2.3,<2.3.5",
@@ -3327,7 +3327,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-05T15:07:13+00:00"
+            "time": "2022-10-06T20:04:40+00:00"
         },
         {
             "name": "sebastian/cli-parser",
