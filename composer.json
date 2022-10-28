@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.4.0",
-        "phpunit/phpunit": "9.5.25",
+        "phpunit/phpunit": "9.5.26",
         "psalm/plugin-phpunit": "^0.17.0",
         "roave/security-advisories": "dev-master",
         "vimeo/psalm": "^4.21.0"
