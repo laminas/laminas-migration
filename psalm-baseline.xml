@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.21.0@d8bec4c7aaee111a532daec32fb09de5687053d1">
+<files psalm-version="5.1.0@4defa177c89397c5e14737a80fe4896584130674">
   <file src="src/Command/MigrateCommand.php">
     <MixedArgument occurrences="6">
       <code>$disableConfigProcessorInjection</code>
@@ -65,9 +65,11 @@
       <code>$composerLockData['packages']</code>
       <code>$composerLockData['packages-dev']</code>
     </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="2">
+    <MixedArrayAssignment occurrences="4">
       <code>$composerJsonData['require']</code>
+      <code>$composerJsonData['require'][$packageName]</code>
       <code>$composerJsonData['require-dev']</code>
+      <code>$composerJsonData['require-dev'][$packageName]</code>
     </MixedArrayAssignment>
     <MixedArrayOffset occurrences="2">
       <code>$composerJsonData['require'][$packageName]</code>
@@ -95,8 +97,9 @@
     <MixedArrayAccess occurrences="1">
       <code>$json['require']</code>
     </MixedArrayAccess>
-    <MixedArrayAssignment occurrences="1">
+    <MixedArrayAssignment occurrences="2">
       <code>$json['require']</code>
+      <code>$json['require']['laminas/laminas-dependency-plugin']</code>
     </MixedArrayAssignment>
     <MixedAssignment occurrences="1">
       <code>$json</code>
@@ -108,10 +111,9 @@
     </MixedArgumentTypeCoercion>
   </file>
   <file src="src/PackageVersions.php">
-    <MixedArgumentTypeCoercion occurrences="4">
+    <MixedArgumentTypeCoercion occurrences="3">
       <code>$allPackageLists ? array_shift($allPackageLists) : []</code>
       <code>$data</code>
-      <code>$data-&gt;packages + (isset($data-&gt;{'packages-dev'}) ? $data-&gt;{'packages-dev'} : [])</code>
       <code>array_merge(...$allPackageLists)</code>
     </MixedArgumentTypeCoercion>
   </file>
@@ -152,9 +154,6 @@
     <MixedArrayAssignment occurrences="1">
       <code>$composer[$section][$normalized]</code>
     </MixedArrayAssignment>
-    <MixedArrayOffset occurrences="1">
-      <code>$composer[$section][$package]</code>
-    </MixedArrayOffset>
     <MixedAssignment occurrences="4">
       <code>$composer[$section][$normalized]</code>
       <code>$constraint</code>
@@ -169,8 +168,9 @@
     </UnusedVariable>
   </file>
   <file src="src/VendorDirectory.php">
-    <MixedArrayAccess occurrences="1">
+    <MixedArrayAccess occurrences="2">
       <code>$composer['config']</code>
+      <code>$composer['config']['vendor-dir']</code>
     </MixedArrayAccess>
     <MixedAssignment occurrences="1">
       <code>$composer</code>
