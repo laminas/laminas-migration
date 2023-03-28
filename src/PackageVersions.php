@@ -70,7 +70,10 @@ final class PackageVersions
             return new self($allPackageLists ? array_shift($allPackageLists) : []);
         }
 
-        return new self(array_merge(...$allPackageLists));
+        /** @var array<string, string> $mergedPackagesList */
+        $mergedPackagesList = array_merge(...$allPackageLists);
+
+        return new self($mergedPackagesList);
     }
 
     /**
